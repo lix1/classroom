@@ -8,16 +8,20 @@
         <div class="panel-heading wrapper-xs bg-primary no-border"></div>
         <div class="panel">
             <div class="table-responsive">
-                <table id="consumerListTable" ui-jq="dataTable" ui-options="dtOptions" class="table table-striped m-b-none">
+                <table datatable="ng" class="table table-striped m-b-none">
                     <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Organization</th>
+                        <th>FirstName</th>
+                        <th>LastName</th>
                     </tr>
                     </thead>
                     <tbody>
+                    <tr ng-repeat="question in classroom.questions">
+                        <td>{{ question.vote }}</td>
+                        <td>{{ question.answerCount }}</td>
+                        <td>{{ question.title }}</td>
+                    </tr>
                     </tbody>
                 </table>
             </div>
