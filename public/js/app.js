@@ -61,9 +61,14 @@ var app = angular.module('app', [
                 templateUrl:'tpl/console/home.html'
             })
             .state('app.classroom', {
-              url: '/classroom/:classroomId',
-              controller: 'ClassroomCtrl',
-              templateUrl:'tpl/console/classroom.html'
+                url: '/classroom/:classroomId',
+                controller: 'ClassroomCtrl',
+                templateUrl:'tpl/console/classroom.html'
+            })
+            .state('app.question', {
+                url: '/question/:questionId',
+                controller: 'QuestionCtrl',
+                templateUrl:'tpl/console/question.html'
             })
             .state('app.tabs.hospitals.detail', {
                 url: '/{id}',
