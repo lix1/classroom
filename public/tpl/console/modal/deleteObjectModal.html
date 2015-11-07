@@ -1,0 +1,21 @@
+<div class="modal-header">
+  <h3 class="modal-title">Confirmation
+    <div class="pull-right" ng-show="isSubmitting">
+      <img src="img/spinning.gif"></img>
+    </div>
+  </h3>
+</div>
+<div class="modal-body">
+  <p>{{message}}</p>
+  <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="modal-footer">
+        <button class="btn btn-success" ng-click="submit()" ng-disabled="isSubmitting">Confirm</button>
+        <button class="btn btn-danger" ng-click="cancel()" ng-disabled="isSubmitting">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

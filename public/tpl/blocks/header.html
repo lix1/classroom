@@ -1,0 +1,88 @@
+<!-- navbar header -->
+<div class="navbar-header bg-black">
+  <button class="pull-right visible-xs dk" ui-toggle-class="show" data-target=".navbar-collapse">
+    <i class="glyphicon glyphicon-cog"></i>
+  </button>
+
+  <!-- brand -->
+  <a href="#/" class="navbar-brand text-lt">
+    <i class="fa fa-star-half-full"></i>
+    <span class="m-l-xs">{{app.name}}</span>
+  </a>
+  <!-- / brand -->
+</div>
+<!-- / navbar header -->
+
+<!-- navbar collapse -->
+<div class="collapse pos-rlt navbar-collapse box-shadow bg-info dker">
+
+  <!-- / buttons -->
+
+  <!-- link and dropdown -->
+  <!--        <ul class="nav navbar-nav hidden-sm">
+           <li><a href="#/app/platform">Browse</a></li>
+         </ul>
+ -->
+
+  <ul class="nav navbar-nav hidden-xs">
+    <li class="dropdown">
+      <a href class="dropdown-toggle">
+        <span>Browse</span>
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu" role="menu">
+        <li><a href="#/app/platform">Services</a></li>
+        <li class="divider"></li>
+        <li><a href="#/app/consumer">Consumers</a></li>
+      </ul>
+    </li>
+  </ul>
+
+
+  <!-- / link and dropdown -->
+
+  <!-- search form
+  <form class="navbar-form  navbar-left shift" role="search"  ng-controller="topBarSearch" ng-submit="doTopBarSearch()">
+    <div class="form-group">
+      <div class="input-group">
+        <input type="text" ng-model="searchQuery" style="width: 245px" class="form-control input-sm bg-light no-border rounded padder" placeholder="Search for services ">
+              <span class="input-group-btn">
+                <button type="submit" class="btn btn-sm bg-light rounded"><i class="fa fa-search"></i></button>
+              </span>
+      </div>
+    </div>
+  </form> -->
+
+  <!-- / search form -->
+
+  <!-- nabar right -->
+  <ul class="nav navbar-nav navbar-right">
+    <li class="hidden-xs">
+      <a ui-fullscreen></a>
+    </li>
+    <li class="dropdown">
+      <a href class="dropdown-toggle clear" data-toggle="dropdown">
+              <span class="thumb-sm avatar pull-right m-t-n-sm m-b-n-sm m-l-sm">
+                <img src="{{profile.img}}">
+              </span>
+        <span class="hidden-sm hidden-md">{{profile.name}}</span> <b class="caret"></b>
+      </a>
+      <!-- dropdown -->
+      <ul class="dropdown-menu animated fadeInRight w">
+        <li>
+          <!-- a ui-sref="app.page.profile">Profile</a--->
+          <a href ng-click="showUserProfile()">Profile</a>
+        </li>
+        <li>
+          <a ui-sref="app.docs">
+            Help
+          </a>
+        </li>
+      </ul>
+      <!-- / dropdown -->
+    </li>
+  </ul>
+  <!-- / navbar right -->
+
+</div>
+<!-- / navbar collapse -->

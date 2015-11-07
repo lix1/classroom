@@ -1,0 +1,24 @@
+{
+  "tabs" : [
+    {
+      "title": "首页",
+      "templateFile": "tpl/treatmentabroad/home.html",
+      "href":"#/treatmentabroad/home"
+    },
+    {
+      "title": "服务项目",
+      "templateFile": "tpl/treatmentabroad/services.html",
+      "href":"#/treatmentabroad/services"
+    },
+    {
+      "title": "海外医院",
+      "templateFile": "tpl/treatmentabroad/hospitals.html",
+      "href":"#/treatmentabroad/hospitals"
+    },
+    {
+      "title": "联系我们",
+      "templateFile": "tpl/treatmentabroad/contactus.html",
+      "href":"#/treatmentabroad/contactus"
+    }
+  ]
+}

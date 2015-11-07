@@ -1,0 +1,20 @@
+{
+  "phoneNumbers" : [
+    {
+      "city" : "北京",
+      "phoneNumber": "13567891234"
+    },{
+      "city" : "上海",
+      "phoneNumber": "13567891234"
+    },{
+      "city" : "广州",
+      "phoneNumber": "13567891234"
+    },{
+      "city" : "深圳",
+      "phoneNumber": "13567891234"
+    },{
+      "city" : "青岛",
+      "phoneNumber": "13567891234"
+    }
+  ]
+}

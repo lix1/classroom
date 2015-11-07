@@ -1,0 +1,33 @@
+{
+  "slides" : [
+    {
+      "image" : "img/home/c0.jpg",
+      "title": "carousel 1",
+      "text": "carousel description #1"
+    },{
+      "image" : "img/home/c1.jpg",
+      "title": "carousel 2",
+      "text": "carousel description #2"
+    },{
+      "image" : "img/home/c2.jpg",
+      "title": "carousel 3",
+      "text": "carousel description #3"
+    },{
+      "image" : "img/home/c3.jpg",
+      "title": "carousel 4",
+      "text": "carousel description #4"
+    },{
+      "image" : "img/home/c4.jpg",
+      "title": "carousel 5",
+      "text": "carousel description #5"
+    },{
+      "image" : "img/home/c5.jpg",
+      "title": "carousel 6",
+      "text": "carousel description #6"
+    },{
+      "image" : "img/home/c6.jpg",
+      "title": "carousel 7",
+      "text": "carousel description #7"
+    }
+  ]
+}

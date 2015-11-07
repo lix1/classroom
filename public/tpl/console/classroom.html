@@ -1,0 +1,31 @@
+<ul class="breadcrumb bg-light lter b-b wrapper-md">
+    <li><a ui-sref="app.console.home"><i class="fa fa-home"></i> Home </a>
+    <li class="active"><i class="fa fa-users"></i> {{classroom.title}} - {{classroom.name}}</li>
+</ul>
+
+<div class="wrapper-md">
+    <div class="wrapper col-lg-12">
+        <div class="panel-heading wrapper-xs bg-primary no-border"></div>
+        <div class="panel">
+            <div class="table-responsive">
+                <table id="consumerListTable" ui-jq="dataTable" ui-options="dtOptions" class="table table-striped m-b-none">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Organization</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12">
+        <button class="btn-lg btn-success access-check" ng-click="showAddConsumerModal()" access-type="CreateConsumer" tooltip-placement="bottom" tooltip="add new consumer" >Add Consumer</button>
+    </div>
+</div>
+
+
