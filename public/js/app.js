@@ -57,7 +57,7 @@ var app = angular.module('app', [
             .state('app.console', {
                 url:        '',
                 templateUrl:'tpl/console/console.html'
-            }).state('app.console.home', {
+            }).state('app.home', {
                 url:        '/home',
                 controller: 'HomeCtrl',
                 templateUrl:'tpl/console/home.html'
@@ -141,12 +141,9 @@ var app = angular.module('app', [
                 request: function (config) {
                     config.headers = config.headers || {};
                     var jwt = localStorage.jwt;
-                    console.log("jwt="+jwt);
                     if (jwt) {
                         config.headers.Authorization = 'Bearer ' + jwt;
                     }
-                    console.log(config);
-
                     // Return the config or wrap it in a promise if blank.
                     return config || $q.when(config);
                 },

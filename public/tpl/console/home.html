@@ -1,15 +1,48 @@
-<div class="wrapper-sm">
-  <div class="row">
-    <div class="col-lg-12">
-      <form class="m-b-md ng-scope ng-pristine ng-valid" ng-submit="doSearch()">
-        <div class="input-group">
-          <input ng-model="inputQuery" type="text" class="form-control input-lg ng-pristine ng-valid" placeholder="Search for class" autofocus="">
+
+<div class="wrapper-md m-r-xs m-l-xs">
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <div class="wrapper-sm">
+        <div class="row">
+          <div class="col-lg-12">
+            <form class="m-b-md ng-scope ng-pristine ng-valid" ng-submit="doSearch()">
+              <div class="input-group">
+                <input ng-model="inputQuery" type="text" class="form-control input-lg ng-pristine ng-valid" placeholder="Search for class" autofocus="">
       <span class="input-group-btn">
         <button class="btn btn-lg btn-default" type="submit">Search</button>
       </span>
+              </div>
+            </form>
+          </div>
         </div>
-      </form>
+      </div>
     </div>
   </div>
+
+</div>
+
+<div class="wrapper-md m-r-xs m-l-xs">
+  <div class="row">
+    <div class="col-lg-12">
+      <h4 class="m-t-lg m-b">Popular Courses</h4>
+      <div class="list-group list-group-lg list-group-sp" ng-repeat="course in courses">
+        <a ui-sref="app.classroom({classroomId: course._id })" class="list-group-item clearfix">
+              <span class="pull-left m-r">
+                <span>{{course.courseNumber}}</span>
+                <small class="clear">{{course.title}}</small>
+              </span>
+              <span class="pull-left m-r">
+                <span>{{course.questions.length}}</span>
+                <small class="text-muted clear">questions</small>
+              </span>
+              <span class="clear">
+                {{course.description}}
+              </span>
+        </a>
+      </div>
+    </div>
+
+  </div>
+
 </div>
 

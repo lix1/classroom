@@ -9,7 +9,7 @@ angular.module('app.accessCtrl', [])
             $http.post('/auth/login',$scope.user).
                 success(function(data, status, headers, config) {
                     $scope.isSubmitting=false;
-                    $state.go('app.console.home')
+                    $state.go('app.home')
                     localStorage.setItem('jwt',data.token);
                     console.log(localStorage.getItem('jwt'));
                 }).

@@ -13,7 +13,7 @@ module.exports = {
           res.json(401, {error: "Error occurred during authentication process: " + err.message});
         }
         if (user) {
-          var token = jwt.sign({email:user.email}, secret, {
+          var token = jwt.sign({email:user.email,userName:user.userName,id:user._id}, secret, {
             expiresInMinutes: 2880 // expires in 24 hours
           });
 
@@ -92,6 +92,28 @@ module.exports = {
       });
 
     }
+  },
+  decodeToken: function(req, success, error) {
+    var token = req.body.token || req.query.token || req.headers.authorization;
+    if (token) {
+      var parts = token.split(' ');
+      if(parts.length==2){
+        token=parts[1];
+      }
+
+      // verifies secret and checks exp
+      jwt.verify(token, secret, function(err, decoded) {
+        if (!err) {
+          success(decoded);
+        } else {
+          error(err);
+        }
+      });
+
+    } else {
+      error('No token provided');
+    }
+
   },
   getAll: function(req, res) {
     UserModel.find({}, function(err, docs) {
