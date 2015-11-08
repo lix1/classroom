@@ -52,6 +52,7 @@ var app = angular.module('app', [
             .state('app', {
                 abstract: true,
                 url: '/app',
+                controller: 'InitAppCtrl',
                 templateUrl: 'tpl/app.html'
             })
             .state('app.console', {
@@ -66,6 +67,11 @@ var app = angular.module('app', [
                 url: '/classroom/:classroomId',
                 controller: 'ClassroomCtrl',
                 templateUrl:'tpl/console/classroom.html'
+            })
+            .state('app.calendar', {
+                url: '/calendar/:classroomId',
+                controller: 'CalendarCtrl',
+                templateUrl:'tpl/console/calendar.html'
             })
             .state('app.question', {
                 url: '/question/:questionId',

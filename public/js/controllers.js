@@ -13,7 +13,7 @@ angular.module('app.controllers', ['ngCookies'])
       // config
       $scope.app = {
         name: 'Classroom',
-        version: '1.3.1',
+        version: '0.0.1',
         // for chart colors
         color: {
           primary: '#7266ba',
@@ -54,4 +54,9 @@ angular.module('app.controllers', ['ngCookies'])
       }
 
   }])
+    .controller('InitAppCtrl', ['$scope','$http','$modal',function ($scope,$http,$modal) {
+      $scope.profile={};
+      $scope.profile.userName="Karen Li";
+
+    }])
  ;
