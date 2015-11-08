@@ -22,7 +22,7 @@ module.exports = {
         questionResq.date=question.date;
         questionResq.vote=question.vote;
         questionResq.answers=list;
-        user.getById(question.authorId, function(user){
+        user.getById(question.authorId, null, function(user){
           questionResq.author=user;
           CourseModel.findOne({_id: question.courseId}, function (err, course) {
             if (err) {

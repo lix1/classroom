@@ -11,7 +11,7 @@ module.exports = {
       res.json(200, docs);
     });
   },
-  getById: function(id,callback,err) {
+  getById: function(id,item,callback,err) {
     UserModel.findOne({_id: id}, function(err, user) {
       console.log(user)
       if (err) {
@@ -23,7 +23,7 @@ module.exports = {
       userResp.email=user.email;
       console.log(userResp)
 
-      callback(userResp)
+      callback(userResp,item)
     });
   }
 };

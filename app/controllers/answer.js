@@ -23,7 +23,7 @@ var findByQuestion = function(questionId, success, err) {
       answerResp.answer=answer.answer;
       answerResp.date=answer.date;
       answerResp.comments=answer.comments;
-      user.getById(answer.authorId, function(user){
+      user.getById(answer.authorId,answerResp, function(user,answerResp){
         console.log(user)
 
         answerResp.author=user;
