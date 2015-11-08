@@ -1,15 +1,19 @@
 var home = require('../app/controllers/home'),
-  intro = require('../app/controllers/intro'),
+  auth = require('../app/controllers/authentication'),
   hospital = require('../app/controllers/hospital'),
   process = require('../app/controllers/process');
+var jwt = require("express-jwt");
 
 module.exports.initialize = function(app, router) {
   router.get('/', home.index);
 
-  app.get('/rest/intro', intro.all);
-  app.post('/rest/intro', intro.create);
-  app.put('/rest/intro', intro.update);
-  app.delete('/rest/intro/:id', intro.delete);
+  router.get('/users', auth.getAll);
+  router.post('/login', auth.login);
+  router.post('/register', auth.register);
+
+
+
+
 
   app.get('/rest/hospital', hospital.all);
   app.get('/rest/hospital/:id', hospital.get);
@@ -23,14 +27,19 @@ module.exports.initialize = function(app, router) {
   app.put('/rest/process', process.update);
   app.delete('/rest/process/:id', process.delete);
 
-  app.get('/adminConsole', function(req, res){
+  app.get('/classroom', function(req, res){
     res.render('index.jade');
   });
-  app.get('/adminConsole/*', function(req, res){
+  app.get('/classroom/*', function(req, res){
     res.render('index.jade');
   });
 
-  app.use('/', router);
+  var jwtCheck = jwt({
+    secret: 'lavender'
+  });
+  app.use(jwtCheck.unless({path: ['/api/login','/api/register']}));
 
 
+  app.use(auth.verifyToken);
+  app.use('/api', router);
 };

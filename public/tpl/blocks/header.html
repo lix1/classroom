@@ -24,7 +24,7 @@
          </ul>
  -->
 
-  <ul class="nav navbar-nav hidden-xs">
+  <ul class="nav navbar-nav hidden-xs" ng-show="false">
     <li class="dropdown">
       <a href class="dropdown-toggle">
         <span>Browse</span>
@@ -42,16 +42,17 @@
   <!-- / link and dropdown -->
 
   <!-- search form
-  <form class="navbar-form  navbar-left shift" role="search"  ng-controller="topBarSearch" ng-submit="doTopBarSearch()">
+  <form class="navbar-form  navbar-left shift" role="search"  ng-controller="topBarSearch" ng-submit="doTopBarSearch()">-->
+    <form class="navbar-form  navbar-left shift" role="search">
     <div class="form-group">
       <div class="input-group">
-        <input type="text" ng-model="searchQuery" style="width: 245px" class="form-control input-sm bg-light no-border rounded padder" placeholder="Search for services ">
+        <input type="text" ng-model="searchQuery" style="width: 245px" class="form-control input-sm bg-light no-border rounded padder" placeholder="Search for classroom ">
               <span class="input-group-btn">
                 <button type="submit" class="btn btn-sm bg-light rounded"><i class="fa fa-search"></i></button>
               </span>
       </div>
     </div>
-  </form> -->
+  </form>
 
   <!-- / search form -->
 

@@ -22,9 +22,10 @@
     "express": "^4.12.4",
     "express-handlebars": "^2.0.1",
     "jade": "^1.11.0",
+    "jsonwebtoken": "^5.4.1",
     "method-override": "^2.3.3",
     "mongoose": "^4.0.6",
-    "morgan": "^1.6.0"
+    "morgan": "^1.6.1"
   },
   "devDependencies": {
     "grunt-cli": "^0.1.13",

@@ -9,6 +9,11 @@
         <div class="panel">
             <div class="table-responsive">
                 <table datatable="ng" class="table table-striped m-b-none">
+                    <thead ng-show="false">
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    </thead>
                     <tbody>
                     <tr ng-repeat="question in classroom.queations" ui-sref="app.question({questionId: question.id })">
                         <td width="10%" align="center"><div>{{ question.votes }}</div><div>votes</div></td>
