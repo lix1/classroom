@@ -7,7 +7,7 @@ angular.module('app.consoleHospitalCtrl', ['datatables'])
                 console.log(data)
                 $scope.classroom=data;
             }).error(function(data, status, headers, config) {
-                $scope.classroom={"_id":"563ee3ff2d686230d935e830","courseNumber":"CS446","department":"CS","description":"Machine Learning","title":"Machine Learning","questions":[{"_id":"563efdaaee8a06400bd4b41d","title":"Title","details":"Question","courseId":"563ee3ff2d686230d935e830","authorId":"563e904edb14c0253b811e2a","__v":0,"date":"2015-11-08T07:45:46.021Z"},{"_id":"563efe3fee8a06400bd4b41e","title":"Title","details":"Question","courseId":"563ee3ff2d686230d935e830","authorId":"563e904edb14c0253b811e2a","__v":0,"date":"2015-11-08T07:48:15.116Z"}]};
+                $scope.classroom={"_id":"563ee3ff2d686230d935e830","courseNumber":"CS446","department":"CS","description":"Machine Learning","title":"Machine Learning","questions":[{"_id":"563efdaaee8a06400bd4b41d","title":"Title","details":"Question","courseId":"563ee3ff2d686230d935e830","authorId":"563e904edb14c0253b811e2a","__v":0,"vote":0,"date":"2015-11-08T07:45:46.021Z"},{"_id":"563efe3fee8a06400bd4b41e","title":"Title","details":"Question","courseId":"563ee3ff2d686230d935e830","authorId":"563e904edb14c0253b811e2a","__v":0,"vote":0,"date":"2015-11-08T07:48:15.116Z"},{"_id":"563f63f1c533141b61fb8bf0","title":"How to build a web app?","details":"Google it.","courseId":"563ee3ff2d686230d935e830","authorId":"563f63aac533141b61fb8bef","__v":0,"vote":0,"date":"2015-11-08T15:02:09.168Z"}]};
             });
 
         $scope.askQuestion = function() {
@@ -68,7 +68,33 @@ angular.module('app.consoleHospitalCtrl', ['datatables'])
 
         };
     }])
-    .controller('CalendarCtrl', ['$scope', function($scope) {
+    .controller('CalendarCtrl1', ['$scope', function($scope) {
+        $scope.eventSources = [];
+        $scope.uiConfig = {
+            calendar:{
+                height: 450,
+                editable: true,
+                header:{
+                    left: 'month basicWeek basicDay agendaWeek agendaDay',
+                    center: 'title',
+                    right: 'today prev,next'
+                },
+                dayClick: $scope.alertEventOnClick,
+                eventDrop: $scope.alertOnDrop,
+                eventResize: $scope.alertOnResize
+            }
+        };
+    }])
+        .controller('CalendarCtrl', ['$scope','$http','$stateParams', function($scope,$http,$stateParams) {
+
+        $http.get("/api/course?id="+$stateParams.classroomId)
+            .success(function (data) {
+                $scope.course=data;
+            }).error(function(data, status, headers, config) {
+                $scope.course={"_id":"563ee3ff2d686230d935e830","courseNumber":"CS446","department":"CS","description":"Machine Learning","title":"Machine Learning","questions":[{"_id":"563efdaaee8a06400bd4b41d","title":"Title","details":"Question","courseId":"563ee3ff2d686230d935e830","authorId":"563e904edb14c0253b811e2a","__v":0,"date":"2015-11-08T07:45:46.021Z"},{"_id":"563efe3fee8a06400bd4b41e","title":"Title","details":"Question","courseId":"563ee3ff2d686230d935e830","authorId":"563e904edb14c0253b811e2a","__v":0,"date":"2015-11-08T07:48:15.116Z"}]};
+            });
+
+
 
         var date = new Date();
         var d = date.getDate();
@@ -84,17 +110,14 @@ angular.module('app.consoleHospitalCtrl', ['datatables'])
 
         /* event source that contains custom events on the scope */
         $scope.events = [
-            {title:'All Day Event', start: new Date(y, m, 1), className: ['b-l b-2x b-info'], location:'New York', info:'This a all day event that will start from 9:00 am to 9:00 pm, have fun!'},
-            {title:'Dance class', start: new Date(y, m, 3), end: new Date(y, m, 4, 9, 30), allDay: false, className: ['b-l b-2x b-danger'], location:'London', info:'Two days dance training class.'},
-            {title:'Game racing', start: new Date(y, m, 6, 16, 0), className: ['b-l b-2x b-info'], location:'Hongkong', info:'The most big racing of this year.'},
-            {title:'Soccer', start: new Date(y, m, 8, 15, 0), className: ['b-l b-2x b-info'], location:'Rio', info:'Do not forget to watch.'},
-            {title:'Family', start: new Date(y, m, 9, 19, 30), end: new Date(y, m, 9, 20, 30), className: ['b-l b-2x b-success'], info:'Family party'},
-            {title:'Long Event', start: new Date(y, m, d - 5), end: new Date(y, m, d - 2), className: ['bg-success bg'], location:'HD City', info:'It is a long long event'},
-            {title:'Play game', start: new Date(y, m, d - 1, 16, 0), className: ['b-l b-2x b-info'], location:'Tokyo', info:'Tokyo Game Racing'},
-            {title:'Birthday Party', start: new Date(y, m, d + 1, 19, 0), end: new Date(y, m, d + 1, 22, 30), allDay: false, className: ['b-l b-2x b-primary'], location:'New York', info:'Party all day'},
-            {title:'Repeating Event', start: new Date(y, m, d + 4, 16, 0), alDay: false, className: ['b-l b-2x b-warning'], location:'Home Town', info:'Repeat every day'},
-            {title:'Click for Google', start: new Date(y, m, 28), end: new Date(y, m, 29), url: 'http://google.com/', className: ['b-l b-2x b-primary']},
-            {title:'Feed cat', start: new Date(y, m+1, 6, 18, 0), className: ['b-l b-2x b-info']}
+            {title:'Midterm Exam Review', start: new Date(y, m, 1), className: ['b-l b-2x b-info'], location:'UMD', info:'Midterm Exam Review in class.'},
+            {title:'TA Discussion', start: new Date(y, m, 3), end: new Date(y, m, 4, 9, 30), allDay: false, className: ['b-l b-2x b-danger'], location:'UMD', info:'TA Discussion.'},
+            {title:'HW2 due', start: new Date(y, m, 8, 15, 0), className: ['b-l b-2x b-info'], location:'UMD', info:'HW2 due. HW2 weights 10%'},
+            {title:'Project proposal due', start: new Date(y, m, 9, 19, 30), end: new Date(y, m, 9, 20, 30), className: ['b-l b-2x b-success'], info:'Project proposal due. Project proposal is at least 5 pages'},
+            {title:'Work on project in class', start: new Date(y, m, d - 5), end: new Date(y, m, d - 1), className: ['bg-success bg'], location:'UMD', info:'No lectures. Work on project in class. '},
+            {title:'Quiz5', start: new Date(y, m, d - 1, 16, 0), className: ['b-l b-2x b-info'], location:'UMD', info:'Quiz5 in class today'},
+            {title:'Project proposal due ', start: new Date(y, m, d + 4, 16, 0), alDay: false, className: ['b-l b-2x b-warning'], location:'UMD', info:'Project proposal due'},
+            {title:'Project presentation', start: new Date(y, m+1, 6, 18, 0), className: ['b-l b-2x b-info']}
         ];
 
         /* alert on dayClick */

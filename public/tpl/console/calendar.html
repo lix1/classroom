@@ -1,16 +1,18 @@
-<div>
-    <div class="wrapper-md bg-light b-b">
-        <button type="button" class="btn btn-default btn-addon pull-right m-t-n-xs" ui-toggle-class="show" target="#aside">
-            <i class="fa fa-bars"></i> List
-        </button>
-        <h1 class="m-n font-thin h3">Fullcalendar</h1>
-    </div>
-    <div class="hbox hbox-auto-xs hbox-auto-sm">
+<ul class="breadcrumb bg-light lter b-b wrapper-md">
+    <li><a ui-sref="app.home"><i class="fa fa-home"></i> Home </a></li>
+    <li><a ui-sref="app.classroom({classroomId: course._id })"><i class="fa fa-users"></i> {{course.courseNumber}} - {{course.title}}</a></li>
+    <li class="active"><i class="fa fa-users"></i> Calendar</li>
+</ul>
+ <div class="hbox hbox-auto-xs hbox-auto-sm">
         <div class="col wrapper-md">
             <div class="clearfix m-b">
                 <button type="button" tooltip="Double click on calendar day to create event" class="btn btn-sm btn-primary btn-addon" ng-click="addEvent()">
                     <i class="fa fa-plus"></i>Add
                 </button>
+                <button type="button" class="btn btn-default btn-addon" ui-toggle-class="show" target="#aside">
+                    <i class="fa fa-bars"></i> List
+                </button>
+
                 <div class="pull-right">
                     <button type="button" class="btn btn-sm btn-default" ng-click="today()">today</button>
                     <div class="btn-group m-l-xs">
@@ -46,4 +48,6 @@
             </div>
         </div>
     </div>
-</div>
+
+
+

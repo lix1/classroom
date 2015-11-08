@@ -11,29 +11,35 @@ module.exports = {
   find:function(req, res) {
     if(req.params.id) {
       QuestionModel.findOne({_id: req.params.id}, function (err, question) {
-        if (err) {
+        if (err||question==null) {
           res.json(500, {error: "Error querying question with id " + req.params.id + ": " + err.message});
         }
         answer.findByQuestion(req.params.id,function(list){
           var questionResq = {};
-          questionResq._id=question._id;
-          questionResq.title=question.title;
-          questionResq.details=question.details;
-          questionResq.date=question.date;
-          questionResq.vote=question.vote;
-          questionResq.answers=list;
-          user.getById(question.authorId, function(user){
-            questionResq.author=user;
-            CourseModel.findOne({_id: question.courseId}, function (err, course) {
-              if (!err) {
-                questionResq.course=course;
-                res.json(200, questionResq);
-              }
+        questionResq._id=question._id;
+        questionResq.title=question.title;
+        questionResq.details=question.details;
+        questionResq.date=question.date;
+        questionResq.vote=question.vote;
+        questionResq.answers=list;
+        user.getById(question.authorId, function(user){
+          questionResq.author=user;
+          CourseModel.findOne({_id: question.courseId}, function (err, course) {
+            if (err) {
+              res.json(500,err);
+            }
+            questionResq.course=course;
+            res.json(200, questionResq);
+          });
+        }, function(err){
+          res.json(500,err);
 
-            });
-          })
         })
-      });
+      }, function(err){
+        res.json(500,err);
+
+      })
+    });
 
     } else {
       res.json(400, { error: 'Invalid request' });

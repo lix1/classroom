@@ -1,6 +1,7 @@
 var fs = require('fs'),
   path = require('path'),
     question = require('./question'),
+    answer = require('./answer'),
     CourseModel = require('../models').Course;
 
 module.exports = {
@@ -15,7 +16,7 @@ module.exports = {
   search:function(req, res) {
     if(req.query.id) {
       CourseModel.findOne({_id: req.query.id}, function (err, course) {
-        if (err) {
+        if (err||course==null) {
           res.json(500, {error: "Error querying course with id " + req.query.id + ": " + err.message});
         }
         question.findByCourse(req.query.id, function(list){

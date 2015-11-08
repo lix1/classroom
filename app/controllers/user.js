@@ -12,14 +12,16 @@ module.exports = {
     });
   },
   getById: function(id,callback,err) {
-    UserModel.find({_id: id}, function(err, user) {
+    UserModel.findOne({_id: id}, function(err, user) {
+      console.log(user)
       if (err) {
         err(err);
       }
       var userResp={};
       userResp.userId=id;
-      userResp.userName=user.userName;
+      userResp.userName=user.name;
       userResp.email=user.email;
+      console.log(userResp)
 
       callback(userResp)
     });

@@ -18,7 +18,8 @@ module.exports.initialize = function(app, router) {
   router.post('/api/course' ,course.create);
   router.post('/api/question' ,question.create);
   router.get('/api/question/:id' ,question.find);
-  router.post('/api/answer' ,answer.create);
+    router.post('/api/answer' ,answer.create);
+    router.get('/api/answer' ,answer.getByQuestion);
 
 
   app.get('/classroom', function(req, res){

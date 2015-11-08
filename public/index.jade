@@ -2,7 +2,7 @@ doctype html
 html(lang='en', data-ng-app='app')
     head
         meta(charset='utf-8')
-        title Admin Console
+        title Classroom
         meta(name='description', content='app, web app, responsive, responsive layout, admin, admin panel, admin dashboard, flat, flat ui, ui kit, AngularJS, ui route, charts, widgets, components')
         meta(name='viewport', content='width=device-width, initial-scale=1, maximum-scale=1')
         link(rel='stylesheet', href='css/bootstrap.css', type='text/css')
@@ -12,6 +12,8 @@ html(lang='en', data-ng-app='app')
         link(rel='stylesheet', href='css/font.css', type='text/css')
         link(rel='stylesheet', href='css/app.css', type='text/css')
         link(rel='stylesheet', href='js/libs/datatables/media/css/jquery.dataTables.min.css', type='text/css')
+        link(rel='stylesheet', href='js/libs/fullcalendar/dist/fullcalendar.css', type='text/css')
+        link(rel='stylesheet', href='js/libs/fullcalendar/dist/theme.css', type='text/css')
     body(ng-controller='AppCtrl')
         #app.app.app-header-fixed.app-aside-folded(ng-class="{'container':app.settings.container}", ui-view='')
         // jQuery
@@ -33,6 +35,11 @@ html(lang='en', data-ng-app='app')
         // libs
         script(src='js/libs/ui-router-tabs.js')
         script(src='js/libs/angular-jwt.min.js')
+        script(type='text/javascript', src='js/libs/jquery/jquery-ui-1.10.3.custom.min.js')
+        script(type='text/javascript', src='js/libs/moment.min.js')
+        script(type='text/javascript', src='js/libs/fullcalendar/calendar.js')
+        script(type='text/javascript', src='js/libs/fullcalendar/dist/fullcalendar.min.js')
+        script(type='text/javascript', src='js/libs/fullcalendar/dist/gcal.js')
         // App
         script(src='js/app.js')
         script(src='js/services.js')
@@ -44,3 +51,5 @@ html(lang='en', data-ng-app='app')
         script(src='js/controllers/console_hospital.js')
         script(src='js/controllers/console_process.js')
         script(src='js/controllers/access.js')
+        // Lazy loading
+              

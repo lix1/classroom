@@ -13,9 +13,10 @@ angular.module('app.consoleHomeCtrl', [])
       $scope.doSearch = function() {
         $http.get("/api/course?courseNumber="+$scope.inputQuery)
             .success(function (data) {
-              $state.go("app.classroom", {classroomId:$scope.inputQuery});
-            }).error(function(data, status, headers, config) {
-              if(status==404){
+              console.log(data)
+              if(data!=null&&data!="null"){
+                $state.go("app.classroom", {classroomId:$scope.inputQuery});
+              } else {
                 var modalInstance = $modal.open({
                   templateUrl: 'tpl/console/modal/ManageCourseModal.html',
                   controller: 'ManageCourseModalCtrl',
@@ -28,7 +29,21 @@ angular.module('app.consoleHomeCtrl', [])
                     }
                   }
                 });
+
               }
+            }).error(function(data, status, headers, config) {
+              var modalInstance = $modal.open({
+                templateUrl: 'tpl/console/modal/ManageCourseModal.html',
+                controller: 'ManageCourseModalCtrl',
+                size: 'lg',
+                resolve: {
+                  items: function () {
+                    var items = {};
+                    items.query=$scope.inputQuery;
+                    return items;
+                  }
+                }
+              });
             });
 
       };

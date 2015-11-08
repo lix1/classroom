@@ -23,7 +23,8 @@ var app = angular.module('app', [
     'app.services',
     'app.directives',
     'app.controllers',
-        'angular-jwt'
+        'angular-jwt',
+        'ui.calendar'
 ])
 .run(
     [          '$rootScope', '$state', '$stateParams',
@@ -72,6 +73,17 @@ var app = angular.module('app', [
                 url: '/calendar/:classroomId',
                 controller: 'CalendarCtrl',
                 templateUrl:'tpl/console/calendar.html'
+                //,resolve: {
+                //    deps: ['uiLoad',
+                //        function( uiLoad ){
+                //            return uiLoad.load( [
+                //                'js/libs/fullcalendar/dist/fullcalendar.css',
+                //                'js/libs/fullcalendar/dist/theme.css',
+                //                'js/libs/jquery/jquery-ui-1.10.3.custom.min.js',
+                //                'js/libs/moment.min.js',
+                //                'js/libs/fullcalendar/dist/fullcalendar.min.js']);
+                //        }]
+                //}
             })
             .state('app.question', {
                 url: '/question/:questionId',
