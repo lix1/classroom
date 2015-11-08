@@ -4,6 +4,7 @@ var mongoose = require('mongoose'),
 
 // set up a mongoose model and pass it using module.exports
 module.exports = mongoose.model('User', new Schema({
+    name:       { type: String, trim: true },
     email:       { type: String, trim: true },
     password:   { type: String }
 }));

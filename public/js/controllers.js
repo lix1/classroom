@@ -12,7 +12,7 @@ angular.module('app.controllers', ['ngCookies'])
 
       // config
       $scope.app = {
-        name: 'Angulr',
+        name: 'Classroom',
         version: '1.3.1',
         // for chart colors
         color: {

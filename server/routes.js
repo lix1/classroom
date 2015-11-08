@@ -2,14 +2,14 @@ var home = require('../app/controllers/home'),
   auth = require('../app/controllers/authentication'),
   hospital = require('../app/controllers/hospital'),
   process = require('../app/controllers/process');
-var jwt = require("express-jwt");
+var jwt = require('jsonwebtoken');
 
 module.exports.initialize = function(app, router) {
   router.get('/', home.index);
 
-  router.get('/users', auth.getAll);
-  router.post('/login', auth.login);
-  router.post('/register', auth.register);
+  router.get('/api/users' ,auth.getAll);
+  router.post('/auth/login', auth.login);
+  router.post('/auth/signup', auth.signup);
 
 
 
@@ -34,12 +34,6 @@ module.exports.initialize = function(app, router) {
     res.render('index.jade');
   });
 
-  var jwtCheck = jwt({
-    secret: 'lavender'
-  });
-  app.use(jwtCheck.unless({path: ['/api/login','/api/register']}));
-
-
-  app.use(auth.verifyToken);
-  app.use('/api', router);
+  app.use('/api', auth.verifyToken);
+  app.use('/', router);
 };

@@ -31,9 +31,9 @@ module.exports = {
       res.json(400, { error: 'Invalid request' });
     }
   },
-  register: function(req, res) {
+  signup: function(req, res) {
     // insert the new item into the collection (validate first)
-    if(req.body.email && req.body.password) {
+    if(req.body.name && req.body.email && req.body.password) {
       // validate email doesn't exist
       UserModel.findOne({email: req.body.email}, function (err, user) {
         if (err) {
@@ -43,6 +43,7 @@ module.exports = {
           res.json(400, {error: "Email "+req.body.email+" already exists." + err.message});
         } else {
           var newUser = new UserModel({
+            name: req.body.name,
             email: req.body.email,
             password: req.body.password
           });

@@ -14,7 +14,8 @@ var app = angular.module('app', [
     'ui.validate',
     'ui.router.tabs',
     'oc.lazyLoad',
-    'app.consoleHomeCtrl',
+        'app.accessCtrl',
+        'app.consoleHomeCtrl',
     'app.consoleHospitalCtrl',
     'app.consoleMainCtrl',
     'app.consoleProcessCtrl',
@@ -85,10 +86,19 @@ var app = angular.module('app', [
             })
 
 
-
             .state('access', {
                 url: '/access',
                 template: '<div ui-view class="fade-in-right-big smooth"></div>'
+            })
+            .state('access.login', {
+                url: '/login',
+                controller: 'LoginCtrl',
+                templateUrl:'tpl/login.html'
+            })
+            .state('access.signup', {
+                url: '/signup',
+                controller: 'SignupCtrl',
+                templateUrl:'tpl/signup.html'
             })
             .state('access.404', {
                 url: '/404',
@@ -99,9 +109,28 @@ var app = angular.module('app', [
   ]
 )
 
+.factory('authInterceptor', function ($rootScope, $q, $window) {
+    return {
+        request: function (config) {
+            config.headers = config.headers || {};
+            if ($window.sessionStorage.token) {
+                config.headers.Authorization = 'Bearer ' + $window.sessionStorage.token;
+            }
+            return config;
+        },
+        response: function (response) {
+            if (response.status === 401) {
+                // handle the case where the user is not authenticated
+            }
+            return response || $q.when(response);
+        }
+    };
+})
+
 // oclazyload config
-.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
+.config(['$ocLazyLoadProvider','$httpProvider', function($ocLazyLoadProvider,$httpProvider) {
     // We configure ocLazyLoad to use the lib script.js as the async loader
+    $httpProvider.interceptors.push('authInterceptor');
     $ocLazyLoadProvider.config({
         debug: false,
         events: true,
