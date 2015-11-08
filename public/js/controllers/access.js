@@ -10,12 +10,12 @@ angular.module('app.accessCtrl', [])
                 success(function(data, status, headers, config) {
                     $scope.isSubmitting=false;
                     $state.go('app.console.home')
-                    $window.sessionStorage.token = data.token;
+                    localStorage.setItem('jwt',data.token);
+                    console.log(localStorage.getItem('jwt'));
                 }).
                 error(function(data, status, headers, config) {
                     $scope.isSubmitting=false;
-                    delete $window.sessionStorage.token;
-                    console.log(data);
+                    localStorage.setItem('jwt',null);
                 });
 
         }

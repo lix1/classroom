@@ -1,36 +1,39 @@
 <div class="modal-header">
   <h3 class="modal-title">{{modalTitle}}
-    <div class="pull-right" ng-show="isSubmitting">
-      <img src="img/spinning.gif"></img>
-    </div>
   </h3>
 </div>
 <div class="modal-body wrapper-lg">
   <div class="row">
     <div class="col-sm-12">
-      <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
       <form name="form" class="form-horizontal form-validation">
         <fieldset>
+          <div class="form-group">
+            <label class="col-md-3 control-label text-right">Course Number</label>
+            <div class="col-md-7">
+              <input placeholder="Please enter title" class="form-control input-md" required type="text"
+                     ng-model="req.courseNumber">
+              <span class="help-block">*required</span>
+            </div>
+          </div>
           <div class="form-group">
             <label class="col-md-3 control-label text-right">Title</label>
             <div class="col-md-7">
               <input placeholder="Please enter title" class="form-control input-md" required type="text"
-                     ng-model="obj.title">
+                     ng-model="req.title">
+              <span class="help-block">*required</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-3 control-label text-right">Department</label>
+            <div class="col-md-7">
+              <input placeholder="Please enter department" class="form-control input-md" required type="text" ng-model="req.department">
               <span class="help-block">*required</span>
             </div>
           </div>
           <div class="form-group">
             <label class="col-md-3 control-label text-right">Description</label>
             <div class="col-md-7">
-              <textarea placeholder="Please enter description" rows="10" class="form-control input-md" required type="text" ng-model="obj.description"></textarea>
-              <span class="help-block">*required</span>
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-md-3 control-label text-right">次序</label>
-            <div class="col-md-7">
-              <input placeholder="Please enter index starting between 1 to 6" class="form-control input-md" required type="number" min="1" max="6" ng-model="obj.index">
-              <span class="help-block">*required</span>
+              <textarea placeholder="Please enter description" rows="10" class="form-control input-md" type="text" ng-model="req.description"></textarea>
             </div>
           </div>
         </fieldset>

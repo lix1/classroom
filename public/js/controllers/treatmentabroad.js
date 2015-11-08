@@ -64,7 +64,7 @@ angular.module('app.treatmentAbroadCtrl', [])
               return items;
             }
           }
-        });hospitalDetail.html
+        });
       }
       $scope.showHomepage = function(url) {
         $window.open(url);

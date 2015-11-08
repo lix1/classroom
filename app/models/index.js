@@ -1,5 +1,5 @@
 module.exports = {
   'User': require('./user'),
-  'Hospital': require('./hospital'),
+  'Course': require('./course'),
   'Process': require('./process')
 };

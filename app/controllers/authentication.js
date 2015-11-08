@@ -14,7 +14,7 @@ module.exports = {
         }
         if (user) {
           var token = jwt.sign({email:user.email}, secret, {
-            expiresInMinutes: 1440 // expires in 24 hours
+            expiresInMinutes: 2880 // expires in 24 hours
           });
 
           // return the information including token as JSON
@@ -63,15 +63,18 @@ module.exports = {
   verifyToken: function(req, res, next) {
 
     // check header or url parameters or post parameters for token
-    var token = req.body.token || req.query.token || req.headers['x-access-token'];
-
+    var token = req.body.token || req.query.token || req.headers.authorization;
     // decode token
     if (token) {
-
+      console.log(req.headers.authorization)
+      var parts = token.split(' ');
+      if(parts.length==2){
+        token=parts[1];
+      }
       // verifies secret and checks exp
       jwt.verify(token, secret, function(err, decoded) {
         if (err) {
-          return res.json({ success: false, message: 'Failed to authenticate token.' });
+          return res.status(401).send({ success: false, message: 'Failed to authenticate token: '+err });
         } else {
           // if everything is good, save to request for use in other routes
           req.decoded = decoded;
@@ -83,7 +86,7 @@ module.exports = {
 
       // if there is no token
       // return an error
-      return res.status(403).send({
+      return res.status(401).send({
         success: false,
         message: 'No token provided.'
       });

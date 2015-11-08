@@ -1,5 +1,6 @@
 var home = require('../app/controllers/home'),
-  auth = require('../app/controllers/authentication'),
+    auth = require('../app/controllers/authentication'),
+    course = require('../app/controllers/course'),
   hospital = require('../app/controllers/hospital'),
   process = require('../app/controllers/process');
 var jwt = require('jsonwebtoken');
@@ -7,9 +8,13 @@ var jwt = require('jsonwebtoken');
 module.exports.initialize = function(app, router) {
   router.get('/', home.index);
 
-  router.get('/api/users' ,auth.getAll);
   router.post('/auth/login', auth.login);
   router.post('/auth/signup', auth.signup);
+  router.get('/api/users' ,auth.getAll);
+  router.get('/api/classroom' ,course.search);
+  router.get('/api/classrooms' ,course.getAll);
+  router.post('/api/classroom' ,course.create);
+
 
 
 
