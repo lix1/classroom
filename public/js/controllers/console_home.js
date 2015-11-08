@@ -2,13 +2,16 @@
 
 angular.module('app.consoleHomeCtrl', [])
   .controller('HomeCtrl', ['$rootScope', '$state', '$scope', '$http','$modal', function($rootScope, $state, $scope, $http,$modal) {
-      $http.get("/api/courses")
-          .success(function (data) {
-            $scope.courses=data;
-          }).error(function(data, status, headers, config) {
-            $scope.courses=[{"_id":"563ee3ff2d686230d935e830","title":"Machine Learning","courseNumber":"CS446","description":"Machine Learning","department":"CS","__v":0}]
-          });
+      var init = function(){
+        $http.get("/api/courses")
+            .success(function (data) {
+              $scope.courses=data;
+            }).error(function(data, status, headers, config) {
+              $scope.courses=[];
+            });
 
+      }
+      init();
 
       $scope.doSearch = function() {
         $http.get("/api/course?courseNumber="+$scope.inputQuery)
@@ -29,6 +32,9 @@ angular.module('app.consoleHomeCtrl', [])
                     }
                   }
                 });
+                modalInstance.result.then(function () {
+                  init();
+                });
 
               }
             }).error(function(data, status, headers, config) {
@@ -44,6 +50,10 @@ angular.module('app.consoleHomeCtrl', [])
                   }
                 }
               });
+              modalInstance.result.then(function () {
+                init();
+              });
+
             });
 
       };

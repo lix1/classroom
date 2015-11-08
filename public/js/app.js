@@ -23,8 +23,7 @@ var app = angular.module('app', [
     'app.services',
     'app.directives',
     'app.controllers',
-        'angular-jwt',
-        'ui.calendar'
+        'angular-jwt'
 ])
 .run(
     [          '$rootScope', '$state', '$stateParams',
