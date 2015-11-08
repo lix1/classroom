@@ -114,13 +114,5 @@ module.exports = {
       error('No token provided');
     }
 
-  },
-  getAll: function(req, res) {
-    UserModel.find({}, function(err, docs) {
-      if (err) {
-        res.json(500, {error: "Error getting all users: " + err.message});
-      }
-      res.json(200, docs);
-    });
   }
 };

@@ -1,6 +1,7 @@
 var fs = require('fs'),
   path = require('path'),
-  CourseModel = require('../models').Course;
+    question = require('./question'),
+    CourseModel = require('../models').Course;
 
 module.exports = {
   getAll: function(req, res) {
@@ -17,7 +18,19 @@ module.exports = {
         if (err) {
           res.json(500, {error: "Error querying course with id " + req.query.id + ": " + err.message});
         }
-        res.json(200, course);
+        question.findByCourse(req.query.id, function(list){
+          var courseResq = {};
+          courseResq._id=course._id;
+          courseResq.courseNumber=course.courseNumber;
+          courseResq.department=course.department;
+          courseResq.description=course.description;
+          courseResq.title=course.title;
+          courseResq.questions=list;
+          res.json(200, courseResq);
+        }, function(){
+          res.json(200, course);
+        })
+
       });
 
     } else if(req.query.courseNumber) {
@@ -29,6 +42,14 @@ module.exports = {
       });
 
     }
+  },
+  findById:function(id, callback, err) {
+    CourseModel.findOne({_id: id}, function (err, course) {
+      if (err) {
+        err(err);
+      }
+      callback(course);
+    });
   },
   create: function(req, res) {
     if(req.body.title && req.body.courseNumber && req.body.department) {

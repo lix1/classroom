@@ -15,7 +15,7 @@
                     <th></th>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="question in classroom.queations" ui-sref="app.question({questionId: question.id })">
+                    <tr ng-repeat="question in classroom.questions" ui-sref="app.question({questionId: question._id })">
                         <td width="10%" align="center"><div>{{ question.votes }}</div><div>votes</div></td>
                         <td width="10%" align="center"><div>{{ question.answerCount }}</div><div>answers</div></td>
                         <td><p>{{ question.title }}</p><div><span class="label bg-info m-r-xs" ng-repeat="tag in question.tags">tag</span></div></td>

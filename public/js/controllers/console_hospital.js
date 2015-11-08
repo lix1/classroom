@@ -7,7 +7,7 @@ angular.module('app.consoleHospitalCtrl', ['datatables'])
                 console.log(data)
                 $scope.classroom=data;
             }).error(function(data, status, headers, config) {
-                $scope.classroom={"_id":"563ee3ff2d686230d935e830","title":"Machine Learning","courseNumber":"CS446","description":"Machine Learning","department":"CS","__v":0}
+                $scope.classroom={"_id":"563ee3ff2d686230d935e830","courseNumber":"CS446","department":"CS","description":"Machine Learning","title":"Machine Learning","questions":[{"_id":"563efdaaee8a06400bd4b41d","title":"Title","details":"Question","courseId":"563ee3ff2d686230d935e830","authorId":"563e904edb14c0253b811e2a","__v":0,"date":"2015-11-08T07:45:46.021Z"},{"_id":"563efe3fee8a06400bd4b41e","title":"Title","details":"Question","courseId":"563ee3ff2d686230d935e830","authorId":"563e904edb14c0253b811e2a","__v":0,"date":"2015-11-08T07:48:15.116Z"}]};
             });
 
         $scope.askQuestion = function() {
@@ -48,17 +48,24 @@ angular.module('app.consoleHospitalCtrl', ['datatables'])
         };
     }])
     .controller('QuestionCtrl', ['$state','$stateParams', '$scope', '$http','$modal', function($state,$stateParams, $scope, $http,$modal) {
-        console.log($stateParams.questionId)
-        $scope.question = {};
-        var i = 1;
-        $scope.question.id=i;
-        $scope.question.votes=i*3;
-        $scope.question.answerCount=i*2;
-        $scope.question.title="question " + i;
-        $scope.question.tags=["node.js","angular.js"]
-        $scope.question.classroom={};
-        $scope.question.classroom.id=1;
-        $scope.question.classroom.title="CS446";
-        $scope.question.classroom.name="Machine Learning";
+        $http.get("/api/question/"+$stateParams.questionId)
+            .success(function (data) {
+                console.log(data)
+                $scope.question=data;
+            }).error(function(data, status, headers, config) {
+                $scope.question={"_id":"563efdaaee8a06400bd4b41d","title":"Title","details":"Question","date":"2015-11-08T07:45:46.021Z","vote":0,"answers":[{"_id":"563f0fa453ddd3eb2d9e7ed0","answer":"hello","questionId":"563efdaaee8a06400bd4b41d","authorId":"563e904edb14c0253b811e2a","__v":0,"comments":[],"date":"2015-11-08T09:02:28.021Z"},{"_id":"563f0fbc53ddd3eb2d9e7ed1","answer":"hello2","questionId":"563efdaaee8a06400bd4b41d","authorId":"563e904edb14c0253b811e2a","__v":0,"comments":[],"date":"2015-11-08T09:02:52.056Z"}],"author":{"userId":"563e904edb14c0253b811e2a"},"course":{"_id":"563ee3ff2d686230d935e830","title":"Machine Learning","courseNumber":"CS446","description":"Machine Learning","department":"CS","__v":0}};
+            });
+
+        $scope.answerQuestion = function() {
+            $scope.req.questionId=$stateParams.questionId;
+            $http.post('/api/answer',$scope.req).
+                success(function(data, status, headers, config) {
+                    console.log(data);
+                }).
+                error(function(data, status, headers, config) {
+
+                });
+
+        };
     }])
 ;

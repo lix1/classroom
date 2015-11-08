@@ -8,5 +8,6 @@ module.exports = mongoose.model('Question', new Schema({
     title:          { type: String, trim: true },
     details:   { type: String, trim: true },
     authorId:    { type: String, trim: true },
-    date:     { type: Date, default: Date.now }
+    date:     { type: Date, default: Date.now },
+    vote:     { type: Number, default: 0 }
 }));

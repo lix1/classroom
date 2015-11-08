@@ -1,16 +1,38 @@
 var fs = require('fs'),
     path = require('path'),
     auth = require('./authentication'),
+    answer = require('./answer'),
+    user = require('./user'),
+    course = require('./course'),
     QuestionModel = require('../models').Question;
+CourseModel = require('../models').Course;
 
 module.exports = {
   find:function(req, res) {
     if(req.params.id) {
-      QuestionModel.findOne({_id: req.params.id}, function (err, course) {
+      QuestionModel.findOne({_id: req.params.id}, function (err, question) {
         if (err) {
           res.json(500, {error: "Error querying question with id " + req.params.id + ": " + err.message});
         }
-        res.json(200, course);
+        answer.findByQuestion(req.params.id,function(list){
+          var questionResq = {};
+          questionResq._id=question._id;
+          questionResq.title=question.title;
+          questionResq.details=question.details;
+          questionResq.date=question.date;
+          questionResq.vote=question.vote;
+          questionResq.answers=list;
+          user.getById(question.authorId, function(user){
+            questionResq.author=user;
+            CourseModel.findOne({_id: question.courseId}, function (err, course) {
+              if (!err) {
+                questionResq.course=course;
+                res.json(200, questionResq);
+              }
+
+            });
+          })
+        })
       });
 
     } else {
