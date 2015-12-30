@@ -1,18 +1,52 @@
-<ul class="breadcrumb bg-light lter b-b wrapper-md">
+<style>
+    /* Specify styling for tooltip contents */
+    .tooltip.customClass .tooltip-inner {
+        color: #2092E9;
+        background-color: white;
+        border: 1px solid;
+        border-color: #2092E9;
+    }
+    /* Hide arrow */
+    .tooltip.customClass .tooltip-arrow {
+        display: none;
+    }
+</style>
+
+<ul class="breadcrumb bg-light lter b-b wrapper-md m-n">
     <li><a ui-sref="app.home"><i class="fa fa-home"></i> Home </a>
     <li class="active"><i class="fa fa-users"></i> {{classroom.courseNumber}} - {{classroom.title}}</li>
 </ul>
 
-<div class="wrapper-md">
-    <div class="col-lg-12 clearfix">
-        <a type="button" tooltip="Show calendar" class="btn btn-sm btn-primary btn-addon pull-right" ui-sref="app.calendar({classroomId: classroom._id })">
-            <i class="fa fa-calendar"></i>Calendar
-        </a>
-    </div>
-    <div class="wrapper col-lg-12">
-        <div class="panel-heading wrapper-xs bg-info no-border"></div>
-        <div class="panel">
-            <div class="table-responsive">
+
+
+
+<div class="hbox hbox-auto-xs hbox-auto-sm">
+    <!-- main -->
+    <div class="col">
+        <!-- main header -->
+        <div class="bg-light lter b-b wrapper-md">
+            <div class="row">
+                <div class="col-sm-6 col-xs-12">
+                    <h1 class="m-n font-thin h3 text-black">CS101</h1>
+                    <small class="text-muted">Computer Sciencr Intro</small>
+                </div>
+                <div class="col-sm-6 text-right hidden-xs">
+                    <div class="inline m-r text-left">
+                        <div class="m-b-xs">100 <span class="text-muted">students</span></div>
+                    </div>
+                    <div class="inline text-left">
+                        <div class="m-b-xs">200 <span class="text-muted">groups</span></div>
+                    </div>
+                    <div class="m-t-sm text-right">
+                        <button class="btn btn-info" ng-click="askQuestion()">New Post</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- / main header -->
+        <div class="panel wrapper cr-l-panel">
+
+            <div class="table-responsive m-t-sm">
                 <table datatable="ng" class="table table-striped m-b-none">
                     <thead ng-show="false">
                     <th></th>
@@ -20,19 +54,186 @@
                     <th></th>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="question in classroom.questions" ui-sref="app.question({questionId: question._id })">
-                        <td width="10%" align="center"><div>{{ question.vote }}</div><div>votes</div></td>
-                        <td width="10%" align="center"><div>{{ question.answers==null?0:question.answers.length }}</div><div>answers</div></td>
-                        <td><p>{{ question.title }}</p><div><span class="label bg-info m-r-xs" ng-repeat="tag in question.tags">tag</span></div></td>
+                    <tr ng-repeat="question in classroom.questions">
+                        <td width="10%" align="center">
+                            <div>{{ question.vote }}</div><div>votes</div>
+                        </td>
+                        <td width="10%" align="center">
+                            <div>{{ question.answers==null?0:question.answers.length }}</div><div>answers</div>
+                        </td>
+                        <td>
+                            <h4 class="question-hyperlink">
+                                <a ui-sref="app.question({questionId: question._id })">{{ question.title }}</a>
+                            </h4>
+                            <div class="tags">
+                                <span class="post-tag bg-info m-r-xs" ng-repeat="tag in question.tags">{{tag}}</span>
+                            </div>
+                            <div class="pull-right">
+                                <p>asked 10 mins ago by Karen Li</p>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr ng-repeat="question in classroom.questions">
+                        <td width="10%" align="center">
+                            <div>{{ question.vote }}</div><div>votes</div>
+                        </td>
+                        <td width="10%" align="center">
+                            <div>{{ question.answers==null?0:question.answers.length }}</div><div>answers</div>
+                        </td>
+                        <td>
+                            <h4 class="question-hyperlink">
+                                <a ui-sref="app.question({questionId: question._id })">{{ question.title }}</a>
+                            </h4>
+                            <div class="tags"><span class="post-tag bg-info m-r-xs" ng-repeat="tag in question.tags">tag</span></div>
+                        </td>
+                    </tr>
+                    <tr ng-repeat="question in classroom.questions">
+                        <td width="10%" align="center">
+                            <div>{{ question.vote }}</div><div>votes</div>
+                        </td>
+                        <td width="10%" align="center">
+                            <div>{{ question.answers==null?0:question.answers.length }}</div><div>answers</div>
+                        </td>
+                        <td>
+                            <h4 class="question-hyperlink">
+                                <a ui-sref="app.question({questionId: question._id })">{{ question.title }}</a>
+                            </h4>
+                            <div class="tags"><span class="post-tag bg-info m-r-xs" ng-repeat="tag in question.tags">tag</span></div>
+                        </td>
+                    </tr>
+                    <tr ng-repeat="question in classroom.questions">
+                        <td width="10%" align="center">
+                            <div>{{ question.vote }}</div><div>votes</div>
+                        </td>
+                        <td width="10%" align="center">
+                            <div>{{ question.answers==null?0:question.answers.length }}</div><div>answers</div>
+                        </td>
+                        <td>
+                            <h4 class="question-hyperlink">
+                                <a ui-sref="app.question({questionId: question._id })">{{ question.title }}</a>
+                            </h4>
+                            <div class="tags"><span class="post-tag bg-info m-r-xs" ng-repeat="tag in question.tags">tag</span></div>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
-    <div class="col-lg-12">
-        <button class="btn-lg btn-success" ng-click="askQuestion()">Ask Questions</button>
+    <!-- / main -->
+    <!-- right col -->
+    <div class="col w-md bg-white-only b-l bg-auto no-border-xs">
+        <div class="cr-r-tab">
+            <uib-tabset justified="true" class="tab-content">
+                <uib-tab>
+                    <uib-tab-heading>
+                        <i class="fa fa-users text-md text-muted wrapper-sm"></i>
+                        <span class="text-sm text-muted">Groups</span>
+                    </uib-tab-heading>
+                    <div class="wrapper-md">
+                        <ul class="list-group list-group-sm list-group-sp auto m-t">
+                            <li class="list-group-item cr-group cr-my-group">
+                                <div class="text-info h4 group-text m-b-xs">Project group 1</div>
+                                <div><span class="text-muted text-sm">This is the classroom for project group 1 for class CS123</span></div>
+                            </li>
+                            <li class="list-group-item cr-group">
+                                <div class="text-info h4 group-text m-b-xs">Project group 2</div>
+                                <div><span class="text-muted text-sm">This is the classroom for project group 2 for class CS123</span></div>
+                            </li>
+                            <li class="list-group-item cr-group">
+                                <div class="text-info h4 group-text m-b-xs">Project group 3</div>
+                                <div><span class="text-muted text-sm">This is the classroom for project group 3 for class CS123</span></div>
+                            </li>
+                        </ul>
+                    </div>
+                </uib-tab>
+                <uib-tab>
+                    <uib-tab-heading>
+                        <i class="fa fa-user text-md text-muted wrapper-sm"></i>
+                        <span class="text-sm text-muted">Students</span>
+                    </uib-tab-heading>
+                    <div class="wrapper-md">
+                        <ul class="list-group no-bg no-borders pull-in">
+                            <li class="list-group-item">
+                                <a herf="" class="pull-left thumb-sm avatar m-r">
+                                    <img src="img/a4.jpg" alt="..." class="img-circle">
+                                    <i class="on b-white bottom"></i>
+                                </a>
+                                <div class="clear">
+                                    <div><a href="">Chris Fox</a></div>
+                                    <small class="text-muted">Designer, Blogger</small>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <a herf="" class="pull-left thumb-sm avatar m-r">
+                                    <img src="img/a5.jpg" alt="..." class="img-circle">
+                                    <i class="on b-white bottom"></i>
+                                </a>
+                                <div class="clear">
+                                    <div><a href="">Mogen Polish</a></div>
+                                    <small class="text-muted">Writter, Mag Editor</small>
+                                </div>
+                            </li>
+                        </ul>
+                        <div class="text-center">
+                            <a href="" class="btn btn-sm btn-primary padder-md m-b">More Connections</a>
+                        </div>
+                    </div>
+                </uib-tab>
+                <uib-tab>
+                    <uib-tab-heading>
+                        <i class="fa fa-list-alt text-md text-muted wrapper-sm"></i>
+                        <span class="text-sm text-muted">Todos</span>
+                    </uib-tab-heading>
+                    <div class="wrapper-md">
+                        <div class="m-b-sm text-md">This week</div>
+                        <div class="streamline b-l m-b">
+                            <div class="sl-item b-info b-l">
+                                <div class="m-l">
+                                    <div class="text-muted">Wed, 25 Mar</div>
+                                    <p>Finished task <a href="" class="text-info">Testing</a>.</p>
+                                </div>
+                            </div>
+                            <div class="sl-item b-info b-l">
+                                <div class="m-l">
+                                    <div class="text-muted">Thu, 10 Mar</div>
+                                    <p>Trip to the moon</p>
+                                </div>
+                            </div>
+                            <div class="sl-item b-info b-l">
+                                <div class="m-l">
+                                    <div class="text-muted">Sat, 5 Mar</div>
+                                    <p>Prepare for presentation</p>
+                                </div>
+                            </div>
+                            <div class="sl-item b-info b-l">
+                                <div class="m-l">
+                                    <div class="text-muted">Sun, 11 Feb</div>
+                                    <p><a href="" class="text-info">Jessi</a> assign you a task <a href="" class="text-info">Mockup Design</a>.</p>
+                                </div>
+                            </div>
+                            <div class="sl-item b-info b-l">
+                                <div class="m-l">
+                                    <div class="text-muted">Thu, 17 Jan</div>
+                                    <p>Follow up to close deal</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </uib-tab>
+            </uib-tabset>
+
+        </div>
+
+
+
+
+
+        </div>
     </div>
+    <!-- / right col -->
 </div>
 
 

@@ -4,6 +4,23 @@
 // All the directives rely on jQuery.
 
 angular.module('app.directives', ['ui.load'])
+    .directive('crmEditor', ['uiLoad', '$document', '$window', function(uiLoad, $document, $window) {
+      return {
+        restrict: 'AC',
+        scope: {
+          id: '@',
+          placeholder: '@'
+        },
+        template:'<textarea name="{{id}}" id="{{id}}"></textarea>',
+        link: function(scope, el, attr) {
+          el.addClass('hide');
+          uiLoad.load('js/libs/ckeditor/ckeditor.js').then(function(){
+            CKEDITOR.replace(scope.id);
+            el.removeClass('hide');
+          });
+        }
+      };
+    }])
   .directive('uiModule', ['MODULE_CONFIG','uiLoad', '$compile', function(MODULE_CONFIG, uiLoad, $compile) {
     return {
       restrict: 'A',

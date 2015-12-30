@@ -1,20 +1,21 @@
 'use strict';
 
 angular.module('app.consoleHospitalCtrl', ['datatables'])
-    .controller('ClassroomCtrl', ['$state','$stateParams', '$scope', '$http','$modal', function($state,$stateParams, $scope, $http,$modal) {
+    .controller('ClassroomCtrl', ['$state','$stateParams', '$scope', '$http','$uibModal', function($state,$stateParams, $scope, $http,$uibModal) {
+        $scope.isCollapsed = true;
         var init = function(){
             $http.get("/api/course?id="+$stateParams.classroomId)
                 .success(function (data) {
                     console.log(data)
                     $scope.classroom=data;
                 }).error(function(data, status, headers, config) {
-                    $scope.classroom={"_id":"563ee3ff2d686230d935e830","courseNumber":"CS446","department":"CS","description":"Machine Learning","title":"Machine Learning","questions":[{"_id":"563efdaaee8a06400bd4b41d","title":"Title","details":"Question","courseId":"563ee3ff2d686230d935e830","authorId":"563e904edb14c0253b811e2a","__v":0,"vote":0,"date":"2015-11-08T07:45:46.021Z"},{"_id":"563efe3fee8a06400bd4b41e","title":"Title","details":"Question","courseId":"563ee3ff2d686230d935e830","authorId":"563e904edb14c0253b811e2a","__v":0,"vote":0,"date":"2015-11-08T07:48:15.116Z"},{"_id":"563f63f1c533141b61fb8bf0","title":"How to build a web app?","details":"Google it.","courseId":"563ee3ff2d686230d935e830","authorId":"563f63aac533141b61fb8bef","__v":0,"vote":0,"date":"2015-11-08T15:02:09.168Z"}]};
+                    $scope.classroom={"_id":"563ee3ff2d686230d935e830","courseNumber":"CS446","department":"CS","description":"Machine Learning","title":"Machine Learning","questions":[{"_id":"563efdaaee8a06400bd4b41d","tags":["tag1","tag2","tag3","tag4","tag5"],"title":"Title","details":"Question","courseId":"563ee3ff2d686230d935e830","authorId":"563e904edb14c0253b811e2a","__v":0,"vote":0,"date":"2015-11-08T07:45:46.021Z"},{"_id":"563efe3fee8a06400bd4b41e","title":"Title","details":"Question","courseId":"563ee3ff2d686230d935e830","authorId":"563e904edb14c0253b811e2a","__v":0,"vote":0,"date":"2015-11-08T07:48:15.116Z"},{"_id":"563f63f1c533141b61fb8bf0","title":"How to build a web app?","details":"Google it.","courseId":"563ee3ff2d686230d935e830","authorId":"563f63aac533141b61fb8bef","__v":0,"vote":0,"date":"2015-11-08T15:02:09.168Z"}]};
                 });
         }
         init();
 
         $scope.askQuestion = function() {
-            var modalInstance = $modal.open({
+            var modalInstance = $uibModal.open({
                 templateUrl: 'tpl/console/modal/ManageQuestionModal.html',
                 controller: 'ManageQuestionModalCtrl',
                 size: 'lg',
@@ -34,7 +35,7 @@ angular.module('app.consoleHospitalCtrl', ['datatables'])
 
 
     }])
-    .controller('ManageQuestionModalCtrl', ['$scope','$modalInstance','$http','items', function ($scope,$modalInstance,$http,items) {
+    .controller('ManageQuestionModalCtrl', ['$scope','$uibModalInstance','$http','items', function ($scope,$uibModalInstance,$http,items) {
         $scope.req={};
         $scope.modalTitle='Ask Question';
         $scope.isSubmitting=false;
@@ -43,7 +44,7 @@ angular.module('app.consoleHospitalCtrl', ['datatables'])
             $scope.isSubmitting=true;
             $http.post('/api/question',$scope.req).
                 success(function(data, status, headers, config) {
-                    $modalInstance.close();
+                    $uibModalInstance.close();
                 }).
                 error(function(data, status, headers, config) {
                     $scope.isSubmitting=false;
@@ -51,32 +52,7 @@ angular.module('app.consoleHospitalCtrl', ['datatables'])
         };
 
         $scope.cancel = function () {
-            $modalInstance.dismiss('cancel');
-        };
-    }])
-    .controller('QuestionCtrl', ['$state','$stateParams', '$scope', '$http','$modal', function($state,$stateParams, $scope, $http,$modal) {
-        var init = function(){
-            $http.get("/api/question/"+$stateParams.questionId)
-                .success(function (data) {
-                    console.log(data)
-                    $scope.question=data;
-                }).error(function(data, status, headers, config) {
-                    $scope.question={"_id":"563efdaaee8a06400bd4b41d","title":"Title","details":"Question","date":"2015-11-08T07:45:46.021Z","vote":0,"answers":[{"_id":"563f0fa453ddd3eb2d9e7ed0","answer":"hello","questionId":"563efdaaee8a06400bd4b41d","authorId":"563e904edb14c0253b811e2a","__v":0,"comments":[],"date":"2015-11-08T09:02:28.021Z"},{"_id":"563f0fbc53ddd3eb2d9e7ed1","answer":"hello2","questionId":"563efdaaee8a06400bd4b41d","authorId":"563e904edb14c0253b811e2a","__v":0,"comments":[],"date":"2015-11-08T09:02:52.056Z"}],"author":{"userId":"563e904edb14c0253b811e2a"},"course":{"_id":"563ee3ff2d686230d935e830","title":"Machine Learning","courseNumber":"CS446","description":"Machine Learning","department":"CS","__v":0}};
-                });
-
-        }
-        init();
-
-        $scope.answerQuestion = function() {
-            $scope.req.questionId=$stateParams.questionId;
-            $http.post('/api/answer',$scope.req).
-                success(function(data, status, headers, config) {
-                    init();
-                }).
-                error(function(data, status, headers, config) {
-
-                });
-
+            $uibModalInstance.dismiss('cancel');
         };
     }])
     .controller('CalendarCtrl1', ['$scope', function($scope) {

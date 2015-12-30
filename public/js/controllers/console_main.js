@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('app.consoleMainCtrl', [])
-    .controller('DeleteModalCtrl', ['$scope','$modalInstance','$http','item', function ($scope,$modalInstance,$http,item) {
+    .controller('DeleteModalCtrl', ['$scope','$uibModalInstance','$http','item', function ($scope,$uibModalInstance,$http,item) {
     $scope.isSubmitting=false;
     $scope.alerts = [];
     $scope.message="Delete entity [ "+item.name+" ] from the database?"
@@ -11,7 +11,7 @@ angular.module('app.consoleMainCtrl', [])
       $http.delete(item.url).
         success(function(data, status, headers, config) {
           $scope.isSubmitting=false;
-          $modalInstance.close();
+              $uibModalInstance.close();
         }).
         error(function(data, status, headers, config) {
           $scope.isSubmitting=false;
@@ -20,7 +20,7 @@ angular.module('app.consoleMainCtrl', [])
     };
 
     $scope.cancel = function () {
-      $modalInstance.dismiss('cancel');
+        $uibModalInstance.dismiss('cancel');
     };
     $scope.closeAlert = function(index) {
       $scope.alerts.splice(index, 1);

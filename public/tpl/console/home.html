@@ -1,48 +1,100 @@
-
 <div class="wrapper-md m-r-xs m-l-xs">
-  <div class="panel panel-default">
-    <div class="panel-body">
-      <div class="wrapper-sm">
-        <div class="row">
-          <div class="col-lg-12">
-            <form class="m-b-md ng-scope ng-pristine ng-valid" ng-submit="doSearch()">
-              <div class="input-group">
-                <input ng-model="inputQuery" type="text" class="form-control input-lg ng-pristine ng-valid" placeholder="Search for class" autofocus="">
-      <span class="input-group-btn">
-        <button class="btn btn-lg btn-default" type="submit">Search</button>
-      </span>
-              </div>
-            </form>
-          </div>
+    <div class="row">
+        <div class="col-sm-8">
+            <div class="row row-sm text-center">
+                <div class="b-b m-b-md">
+                    <h4 class="font-thin m-t-none m-b-md ">My Classrooms</h4>
+                </div>
+
+                <div class="col-xs-4">
+                    <div class="panel padder-v item home-class">
+                        <div class="h1 text-info font-thin h1">CS446</div>
+                        <div><span class="text-muted text-md">Machine Learning</span></div>
+                        <div><span class="text-muted text-md">Prof Hello</span></div>
+                        <div><span class="text-muted text-md">01:00PM - 02:15PM</span></div>
+                        <div class="top text-right w-full go-icon">
+                            <i class="fa fa-arrow-circle-o-right m-r-sm m-t-xs"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-4">
+                    <div class="panel padder-v item home-class">
+                        <div class="h1 text-info font-thin h1">CS646</div>
+                        <div><span class="text-muted text-md">Machine Learning</span></div>
+                        <div><span class="text-muted text-md">01:00PM - 02:15PM</span></div>
+                        <div class="top text-right w-full go-icon">
+                            <i class="fa fa-arrow-circle-o-right m-r-sm m-t-xs"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-4">
+                    <div class="panel padder-v item home-class">
+                        <div class="h1 text-info font-thin h1">CS446</div>
+                        <div><span class="text-muted text-md">Machine Learning</span></div>
+                        <div><span class="text-muted text-md">Prof Hello</span></div>
+                        <div><span class="text-muted text-md">01:00PM - 02:15PM</span></div>
+                        <div class="top text-right w-full go-icon">
+                            <i class="fa fa-arrow-circle-o-right m-r-sm m-t-xs"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-4">
+                    <div class="panel padder-v item home-class">
+                        <div class="h1 text-info font-thin h1">CS646</div>
+                        <div><span class="text-muted text-md">Machine Learning</span></div>
+                        <div><span class="text-muted text-md">01:00PM - 02:15PM</span></div>
+                        <div class="top text-right w-full go-icon">
+                            <i class="fa fa-arrow-circle-o-right m-r-sm m-t-xs"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12">
+                    <button class="btn btn-default btn-addon btn-sm pull-left"><i class="fa fa-plus"></i>Add class to your schedule</button>
+                </div>
+            </div>
         </div>
-      </div>
+        <div class="col-sm-4">
+            <div class="b-b m-b-md text-center">
+                <h4 class="font-thin m-t-none m-b-md ">My Calendar</h4>
+            </div>
+            <div class="m-b-md pull-right">
+                <button class="btn btn-default btn-addon btn-sm pull-left"><i class="fa fa-calendar-o"></i>View full calendar</button>
+            </div>
+            <div class="wrapper">
+                <ul class="timeline">
+                    <li class="tl-header">
+                        <span class="label label-empty">01/01/2016</span>
+                    </li>
+                    <li class="tl-item">
+                        <div class="tl-wrap b-info">
+                            <div class="tl-content panel padder b-a w-md w-auto-xs">
+                                <span class="arrow left pull-up"></span>
+                                <div class="text-lt m-b-sm">CS446</div>
+                                <div class="panel-body pull-in b-t b-light">
+                                    hi
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="tl-item">
+                        <div class="tl-wrap b-info">
+                            <span class="tl-date">11:59pm</span>
+                            <div class="tl-content panel padder b-a w-md w-auto-xs">
+                                <span class="arrow left pull-up"></span>
+                                <div class="text-lt m-b-sm">Todo</div>
+                                <div class="panel-body pull-in b-t b-light">
+                                    hi
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="tl-header">
+                        <div class="btn btn-sm btn-default btn-rounded">more</div>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
-  </div>
-
-</div>
-
-<div class="wrapper-md m-r-xs m-l-xs">
-  <div class="row">
-    <div class="col-lg-12">
-      <h4 class="m-t-lg m-b">Popular Courses</h4>
-      <div class="list-group list-group-lg list-group-sp" ng-repeat="course in courses">
-        <a ui-sref="app.classroom({classroomId: course._id })" class="list-group-item clearfix">
-              <span class="pull-left m-r">
-                <span>{{course.courseNumber}}</span>
-                <small class="clear">{{course.title}}</small>
-              </span>
-              <span class="pull-left m-r">
-                <span>{{course.questions.length}}</span>
-                <small class="text-muted clear">questions</small>
-              </span>
-              <span class="clear">
-                {{course.description}}
-              </span>
-        </a>
-      </div>
-    </div>
-
-  </div>
 
 </div>
 

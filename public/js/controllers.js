@@ -54,7 +54,7 @@ angular.module('app.controllers', ['ngCookies'])
       }
 
   }])
-    .controller('InitAppCtrl', ['$scope','$http','$modal',function ($scope,$http,$modal) {
+    .controller('InitAppCtrl', ['$scope','$http',function ($scope,$http) {
       $scope.profile={};
       $scope.profile.userName="Karen Li";
 

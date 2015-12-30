@@ -1,0 +1,28 @@
+<div class="box-shadow bg-info dker">
+    <div class="lh_center">
+        <div class="row">
+            <div class="col-lg-4 col-md-12">
+                <a href="#/" class="navbar-brand text-lt">
+                    <i class="fa fa-star-half-full"></i>
+                    <span class="m-l-xs">{{app.name}}</span>
+                </a>
+
+            </div>
+            <div class="col-lg-8 col-md-12 pull-right">
+                <form class="navbar-form form-inline navbar-left shift form-validation" name="loginForm" >
+                    <div class="form-group">
+                        <input type="email" class="form-control" placeholder="email" ng-model="loginUser.email" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control" placeholder="password" ng-model="loginUser.password" required>
+                    </div>
+                    <button type="submit" class="btn btn-default" ng-click="login()" ng-disabled='loginForm.$invalid'>Log in</button>
+                    <a ui-sref="access.forgotpwd">Forgot password?</a>
+                </form>
+            </div>
+        </div>
+
+
+    </div>
+
+</div>

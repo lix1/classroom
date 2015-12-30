@@ -1,0 +1,142 @@
+<ul class="breadcrumb bg-light lter b-b wrapper-md">
+    <li><a ui-sref="app.home"><i class="fa fa-home"></i> Home </a></li>
+    <li><a ui-sref="app.classroom({classroomId: question.course._id })"><i class="fa fa-users"></i> {{post.course.courseNumber}} - {{post.course.title}}</a></li>
+    <li class="active"><i class="fa fa-users"></i> {{post.title}}</li>
+</ul>
+
+<div class="wrapper-md">
+    <div class="panel hbox hbox-auto-xs b-a">
+        <div class="col wrapper-md w-md r-r b-r">
+
+            <div class="row">
+                <div class="text-center col-lg-12">
+                    <a class="thumb-wrapper thumb post-img">
+                        <img src="img/b0.jpg">
+                    </a>
+                </div>
+                <div class="text-center col-lg-12 m-t-md">
+                    <div class="text-xs block m-t-xs"><i class="fa fa-user text-muted"></i> <a href="" class="m-r-sm">{{post.author.userName}}</a></div>
+                    <div class="text-xs block m-t-xs"><i class="fa fa-clock-o text-muted"></i> {{post.date}}</div>
+                </div>
+                <div class="text-center col-lg-12 m-t-md">
+                    <a href="" class="m-l-sm"><i class="fa fa-folder-open-o text-muted"></i> save</a>
+                    <a href="" class="m-l-sm"><i class="fa fa-thumbs-o-up text-muted"></i> 4 votes</a>
+                </div>
+            </div>
+        </div>
+        <div class="col wrapper-lg">
+            <div class="blog-post">
+                <div class="panel">
+                    <h2 class="m-t-none">{{post.title}}</h2>
+                    <div>
+                        <p ng-bind-html="trustAsHtml(post.content)"></p>
+                    </div>
+                    <div class="line line-lg b-b"></div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="tags m-b-sm">
+                                <span class="post-tag bg-info m-r-xs">tag1</span>
+                                <span class="post-tag bg-info m-r-xs">tag2</span>
+                                <span class="post-tag bg-info m-r-xs">tag3</span>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <a ng-click="gotoReply()">reply</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel hbox hbox-auto-xs b-a">
+        <div class="answers-header-wrapper">
+            <div class="answers-header">
+                <span class="answer-count">{{post.replies.length}} answers</span>
+                <div class="answers-header-tabs">
+                    <a href="">
+                        newest</a>
+                    <a href="">
+                        oldest</a>
+                    <a class="current" href="">
+                        votes</a>
+                </div>
+            </div>
+        </div>
+        <div class="panel hbox hbox-auto-xs no-border" ng-repeat="answer in post.replies  | orderBy:'date':false">
+            <div class="wrapper-lg">
+                <div class="reply-header">
+                    <a class="pull-left thumb-md thumb-wrapper m-r-md">
+                        <img src="img/b0.jpg">
+                    </a>
+                    <div class="reply-header-content">
+                        <a href="" class="text-md">John smith</a>
+                        <span class="text-muted text-sm block m-t-xs">
+                            <a href="" class="m-r-sm"><i class="fa fa-thumbs-o-up text-muted"></i> 4 votes </a>
+                            <a ng-click="toggleReply[answer._id] = !toggleReply[answer._id]"><i class="fa fa-comment-o text-muted"></i> add a comment</a>
+
+
+                        </span>
+                    </div>
+                </div>
+                <div class="reply-content">
+                    <p ng-bind-html="trustAsHtml(answer.answer)"></p>
+                </div>
+                <div uib-collapse="toggleReply[answer._id]" class="reply-textarea">
+                    <form class="ng-pristine ng-valid" ng-submit="answerQuestion(answer._id)">
+                        <div class="form-group">
+                            <div crm-editor id="{{answer._id}}"></div>
+                        </div>
+                        <div class="form-group">
+                            <div class="pull-left">
+                                <div class="checkbox m-r-md">
+                                    <label class="i-checks">
+                                        <input type="checkbox" checked=""><i></i> Post as anonymous
+                                    </label>
+                                </div>
+
+                            </div>
+                            <button type="submit" class="btn btn-info"><i class="fa fa-paper-plane-o"></i> Post</button>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="reply-separator">
+                <div class="m-n line line-lg b-b"></div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="panel hbox hbox-auto-xs b-a" id="post-reply">
+        <div class="wrapper-lg">
+            <h4 class="m-b">Your Reply</h4>
+
+            <!--<div bootstrap-tagsinput></div>-->
+
+            <form class="ng-pristine ng-valid" ng-submit="answerQuestion('editor1')">
+                <div class="form-group">
+                    <div crm-editor id="editor1"></div>
+                </div>
+                <div class="form-group">
+                    <div class="pull-left">
+                        <div class="checkbox m-r-md">
+                            <label class="i-checks">
+                                <input type="checkbox" checked=""><i></i> Post as anonymous
+                            </label>
+                        </div>
+
+                    </div>
+                    <button type="submit" class="btn btn-info"><i class="fa fa-paper-plane-o"></i> Post</button>
+
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+</div>
+
+

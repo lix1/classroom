@@ -37,6 +37,7 @@ module.exports = {
       // validate email doesn't exist
       UserModel.findOne({email: req.body.email}, function (err, user) {
         if (err) {
+          
           // error
         }
         if (user) {

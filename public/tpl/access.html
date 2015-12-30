@@ -1,0 +1,84 @@
+  <!-- navbar -->
+  <div data-ng-include=" 'tpl/blocks/login_signup_header.html' " class="app-header navbar">
+  </div>
+  <!-- / navbar -->
+
+  <!-- content -->
+  <div class="app-content">
+    <div class="lh_center">
+      <div class="row">
+        <div class="col-lg-6">
+          <div ui-view class="fade-in-left-big smooth">
+            <div class="wrapper text-center m-t-xl">
+              <h2>MAKE LEARNING EASIER,</h2>
+              <h2>TOGETHER.</h2>
+            </div>
+            <div class="m-t-md">
+              <h1>
+                <span class="m-l-xs"><i class="fa fa-users"></i> Collaboration</span>
+              </h1>
+              <h1>
+                <span class="m-l-xs"><i class="fa fa-weixin"></i> Ask</span>
+              </h1>
+              <h1>
+                <span class="m-l-xs"><i class="fa fa-share-alt"></i> Share</span>
+              </h1>
+
+            </div>
+
+          </div>
+
+        </div>
+        <div class="col-lg-6">
+          <div class="m-t-lg">
+            <div class="wrapper text-center m-t-xl">
+              <h4>Sign up to get conected</h4>
+            </div>
+            <div class="b-l">
+              <form class="form-validation m-l-lg" name="signupForm" >
+                <div class="text-danger wrapper text-center" ng-show="authError">
+                  {{authError}}
+                </div>
+                <div class="list-group list-group-sm">
+                  <div class="list-group-item">
+                    <input placeholder="First Name" class="form-control no-border" ng-model="user.firstName" required>
+                  </div>
+                  <div class="list-group-item">
+                    <input placeholder="Last Name" class="form-control no-border" ng-model="user.lastName" required>
+                  </div>
+                  <div class="list-group-item">
+                    <input type="email" placeholder="Email" class="form-control no-border" ng-model="user.email" required>
+                  </div>
+                  <div class="list-group-item">
+                    <input type="password" placeholder="Password" class="form-control no-border" ng-model="user.password" required>
+                  </div>
+                </div>
+                <!--<div class="checkbox m-b-md m-t-none">-->
+                <!--<label class="i-checks">-->
+                <!--<input type="checkbox" ng-model="agree" required><i></i> Agree the <a href>terms and policy</a>-->
+                <!--</label>-->
+                <!--</div>-->
+                <span class="help-block m-b-none">By clicking Sign Up, you agree to our <a href="#/">User Agreement</a>, <a href="#/">Privacy Policy</a>, and <a href="#/">Cookie Policy</a></span>
+                <button type="submit" class="btn btn-lg btn-info btn-block" ng-click="signup()" ng-disabled='signupForm.$invalid&&!isSubmitting'>Sign Up</button>
+                <!--<div class="line line-dashed"></div>-->
+                <!--<p class="text-center"><small>Already have an account?</small></p>-->
+                <!--<a ui-sref="access.signin" class="btn btn-lg btn-default btn-block" ng-click="login()">Sign in</a>-->
+
+              </form>
+            </div>
+          </div>
+          <div class="text-center" ng-include="'tpl/blocks/page_footer.html'"></div>
+        </div>
+        </div>
+      </div>
+    </div>
+  <!-- /content -->
+
+
+
+  <!-- footer -->
+  <div class="app-footer wrapper b-t bg-light">
+    <span class="pull-right">Classroom Version {{app.version}} <a href ui-scroll="app" class="m-l-sm text-muted"><i class="fa fa-long-arrow-up"></i></a></span>
+    Classroom
+  </div>
+  <!-- / footer -->

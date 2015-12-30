@@ -5,26 +5,10 @@
 
 // Demonstrate how to register services
 angular.module('app.services', [])
-  .factory('commonService', function($http,$state,$modal) {
+  .factory('CRMEditor', function($http,$state) {
     return {
-      showDeleteModal: function(name,url) {
-        var modalInstance = $modal.open({
-          templateUrl: 'tpl/console/modal/deleteObjectModal.html',
-          controller: 'DeleteModalCtrl',
-          size: 'lg',
-          resolve: {
-            item: function () {
-              var item = {};
-              item.name=name;
-              item.url=url;
-              return item;
-            }
-          }
-        });
-
-        modalInstance.result.then(function (platformId) {
-          $state.go($state.current, {}, {reload: true});
-        });
+      getValue: function(id) {
+        return CKEDITOR.instances[id].getData();
       }
     };
   });

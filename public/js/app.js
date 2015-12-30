@@ -17,8 +17,7 @@ var app = angular.module('app', [
         'app.accessCtrl',
         'app.consoleHomeCtrl',
     'app.consoleHospitalCtrl',
-    'app.consoleMainCtrl',
-    'app.consoleProcessCtrl',
+        'app.consoleMainCtrl',
     'app.filters',
     'app.services',
     'app.directives',
@@ -59,10 +58,16 @@ var app = angular.module('app', [
             .state('app.console', {
                 url:        '',
                 templateUrl:'tpl/console/console.html'
-            }).state('app.home', {
+            })
+            .state('app.home', {
                 url:        '/home',
                 controller: 'HomeCtrl',
                 templateUrl:'tpl/console/home.html'
+            })
+            .state('app.profile', {
+                url:        '/profile',
+                controller: 'ProfileCtrl',
+                templateUrl:'tpl/console/profile.html'
             })
             .state('app.classroom', {
                 url: '/classroom/:classroomId',
@@ -73,22 +78,23 @@ var app = angular.module('app', [
                 url: '/calendar/:classroomId',
                 controller: 'CalendarCtrl',
                 templateUrl:'tpl/console/calendar.html'
-                //,resolve: {
-                //    deps: ['uiLoad',
-                //        function( uiLoad ){
-                //            return uiLoad.load( [
-                //                'js/libs/fullcalendar/dist/fullcalendar.css',
-                //                'js/libs/fullcalendar/dist/theme.css',
-                //                'js/libs/jquery/jquery-ui-1.10.3.custom.min.js',
-                //                'js/libs/moment.min.js',
-                //                'js/libs/fullcalendar/dist/fullcalendar.min.js']);
-                //        }]
-                //}
+
             })
             .state('app.question', {
                 url: '/question/:questionId',
-                controller: 'QuestionCtrl',
-                templateUrl:'tpl/console/question.html'
+                controller: 'PostCtrl',
+                templateUrl:'tpl/console/post.html',
+                resolve: {
+                    deps: ['uiLoad',
+                        function( uiLoad ){
+                            return uiLoad.load( [
+                                'js/controllers/post.js',
+                                'js/libs/bootstrap-tagsinput/src/bootstrap-tagsinput-angular.js',
+                                'js/libs/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js',
+                                'js/libs/bootstrap-tagsinput/src/bootstrap-tagsinput.css'
+                            ]);
+                        }]
+                }
             })
             .state('app.tabs.hospitals.detail', {
                 url: '/{id}',
@@ -105,21 +111,27 @@ var app = angular.module('app', [
             })
 
 
+            .state('login_signup', {
+                url: '/s',
+                controller: 'LoginCtrl',
+                templateUrl:'tpl/access.html'
+            })
             .state('access', {
                 url: '/access',
-                template: '<div ui-view class="fade-in-right-big smooth"></div>'
+                //template: '<div ui-view class="fade-in-right-big smooth"></div>'
+                templateUrl:'tpl/access.html'
             })
-            .state('access.login', {
+            .state('login', {
                 url: '/login',
                 controller: 'LoginCtrl',
                 templateUrl:'tpl/login.html'
             })
-            .state('access.signup', {
+            .state('signup', {
                 url: '/signup',
                 controller: 'SignupCtrl',
                 templateUrl:'tpl/signup.html'
             })
-            .state('access.404', {
+            .state('404', {
                 url: '/404',
                 templateUrl: 'tpl/page_404.html'
             })

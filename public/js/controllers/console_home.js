@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('app.consoleHomeCtrl', [])
-  .controller('HomeCtrl', ['$rootScope', '$state', '$scope', '$http','$modal', function($rootScope, $state, $scope, $http,$modal) {
+  .controller('HomeCtrl', ['$rootScope', '$state', '$scope', '$http','$uibModal', function($rootScope, $state, $scope, $http,$uibModal) {
       var init = function(){
         $http.get("/api/courses")
             .success(function (data) {
@@ -20,7 +20,7 @@ angular.module('app.consoleHomeCtrl', [])
               if(data!=null&&data!="null"){
                 $state.go("app.classroom", {classroomId:$scope.inputQuery});
               } else {
-                var modalInstance = $modal.open({
+                var modalInstance = $uibModal.open({
                   templateUrl: 'tpl/console/modal/ManageCourseModal.html',
                   controller: 'ManageCourseModalCtrl',
                   size: 'lg',
@@ -38,7 +38,7 @@ angular.module('app.consoleHomeCtrl', [])
 
               }
             }).error(function(data, status, headers, config) {
-              var modalInstance = $modal.open({
+              var modalInstance = $uibModal.open({
                 templateUrl: 'tpl/console/modal/ManageCourseModal.html',
                 controller: 'ManageCourseModalCtrl',
                 size: 'lg',
@@ -60,7 +60,7 @@ angular.module('app.consoleHomeCtrl', [])
 
 
   }])
-  .controller('ManageCourseModalCtrl', ['$scope','$modalInstance','$http','items', function ($scope,$modalInstance,$http,items) {
+  .controller('ManageCourseModalCtrl', ['$scope','$uibModalInstance','$http','items', function ($scope,$uibModalInstance,$http,items) {
     $scope.req={};
     $scope.modalTitle='Add new portal '+items.query+'?';
       $scope.isSubmitting=false;
@@ -69,7 +69,7 @@ angular.module('app.consoleHomeCtrl', [])
       $scope.isSubmitting=true;
       $http.post('/api/course',$scope.req).
         success(function(data, status, headers, config) {
-          $modalInstance.close();
+            $uibModalInstance.close();
         }).
         error(function(data, status, headers, config) {
           $scope.isSubmitting=false;
@@ -77,7 +77,7 @@ angular.module('app.consoleHomeCtrl', [])
     };
 
     $scope.cancel = function () {
-      $modalInstance.dismiss('cancel');
+      $uibModalInstance.dismiss('cancel');
     };
   }])
 ;
