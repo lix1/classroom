@@ -287,3 +287,38 @@ input[type="search"] {
   padding-left: 30px;
   padding-right: 30px;
 }
+.profile-header {
+  border-bottom: 1px solid #dee5e7;
+  height: 42px;
+}
+.tooltip.custom-tooltip .tooltip-inner {
+  color: #fff;
+  background-color: #55ACEE;
+}
+.tooltip.custom-tooltip .tooltip-arrow {
+  display: none;
+}
+.crm-number {
+  color: #55ACEE;
+  font-weight: 300;
+}
+.crm-number:hover {
+  color: #147CCC;
+}
+.crm-name {
+  color: #58666e;
+}
+.crm-name:hover {
+  color: #363f44;
+}
+.crm-box-content {
+  align-self: center;
+}
+.crm-box-wrapper {
+  display: flex;
+  justify-content: center;
+  height: 280px;
+}
+.form-control:focus {
+  border-color: #55ACEE;
+}

@@ -60,24 +60,4 @@ angular.module('app.consoleHomeCtrl', [])
 
 
   }])
-  .controller('ManageCourseModalCtrl', ['$scope','$uibModalInstance','$http','items', function ($scope,$uibModalInstance,$http,items) {
-    $scope.req={};
-    $scope.modalTitle='Add new portal '+items.query+'?';
-      $scope.isSubmitting=false;
-
-    $scope.submit = function() {
-      $scope.isSubmitting=true;
-      $http.post('/api/course',$scope.req).
-        success(function(data, status, headers, config) {
-            $uibModalInstance.close();
-        }).
-        error(function(data, status, headers, config) {
-          $scope.isSubmitting=false;
-        });
-    };
-
-    $scope.cancel = function () {
-      $uibModalInstance.dismiss('cancel');
-    };
-  }])
 ;

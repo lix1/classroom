@@ -32,7 +32,6 @@ app.controller('PostCtrl', ['$state','$stateParams', '$scope', '$http','$uibModa
 
     $scope.answerQuestion = function(id) {
         var data = CRMEditor.getValue(id);
-        console.log(data)
         var req={};
         req.questionId=$stateParams.questionId;
         $http.post('/api/answer',req).

@@ -2,11 +2,12 @@
 
 angular.module('app.accessCtrl', [])
     .controller('LoginCtrl', ['$state', '$scope', '$http','$window',function($state, $scope, $http,$window) {
-        console.log('hi')
+        $scope.loginUser={};
+        $scope.user={};
         $scope.isSubmitting = false;
         $scope.login=function(){
             $scope.isSubmitting = true;
-
+            console.log($scope.loginUser)
             $http.post('/auth/login',$scope.loginUser).
                 success(function(data, status, headers, config) {
                     $scope.isSubmitting=false;
@@ -23,6 +24,7 @@ angular.module('app.accessCtrl', [])
 
         $scope.signup=function(){
             $scope.isSubmitting = true;
+            console.log($scope.user)
 
             $http.post('/auth/signup',$scope.user).
                 success(function(data, status, headers, config) {
@@ -60,8 +62,5 @@ angular.module('app.accessCtrl', [])
         $scope.login=function(){
             $state.go('access.login')
         }
-    }])
-    .controller('ProfileCtrl', ['$state', '$scope', '$http',function($state, $scope, $http) {
-        console.log('hi')
     }])
 ;

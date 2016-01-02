@@ -3,13 +3,19 @@ var mongoose = require('mongoose'),
     path = require('path');
 
 var schema = new Schema({
-    _id:        { type: String, lowercase: true, trim: true },
-    last_login_ts: { type: Date },
+    _id:        {   type: String, lowercase: true, trim: true,
+                    validate: {
+                        validator: function(v) {
+                            return /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+\.edu$/.test(v);
+                        },
+                        message: '{VALUE} is not a valid university email!'
+                    }},
+    lastLoginTS: { type: Date },
     password:   { type: String, required : true },
     isVerified: {type : Boolean, default : false},
-    sec_roles:  [{type: Schema.Types.ObjectId, ref: 'SecurityRole' }],
-    created_ts: { type: Date, default: Date.now },
-    updated_ts: { type: Date, default: Date.now }
+    secRoles:  [{type: Schema.Types.ObjectId, ref: 'SecurityRole' }],
+    createdTS: { type: Date, default: Date.now },
+    updatedTS: { type: Date, default: Date.now }
 });
 schema.virtual('email').get(function() {
     return this._id;

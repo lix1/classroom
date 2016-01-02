@@ -67,7 +67,16 @@ var app = angular.module('app', [
             .state('app.profile', {
                 url:        '/profile',
                 controller: 'ProfileCtrl',
-                templateUrl:'tpl/console/profile.html'
+                templateUrl:'tpl/console/profile.html',
+                resolve: {
+                    deps: ['uiLoad',
+                        function( uiLoad ){
+                            return uiLoad.load( [
+                                'js/controllers/profile.js',
+                                'js/directives/TypeaheadDirective.js'
+                            ]);
+                        }]
+                }
             })
             .state('app.classroom', {
                 url: '/classroom/:classroomId',

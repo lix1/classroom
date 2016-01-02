@@ -1,6 +1,8 @@
 var fs = require('fs'),
-  path = require('path'),
-  UserModel = require('../models').User;
+    path = require('path'),
+    UserModel = require('../models').User,
+    UniversityModel = require('../models').University,
+    UserProfileModel = require('../models').UserProfile;
 var jwt = require('jsonwebtoken');
 
 var secret = 'lavender';
@@ -8,55 +10,72 @@ var secret = 'lavender';
 module.exports = {
   login: function(req, res) {
     if(req.body.email && req.body.password) {
-      UserModel.findOne({email: req.body.email, password: req.body.password}, function (err, user) {
+      UserModel.findOne({_id: req.body.email, password: req.body.password}, function (err, user) {
         if (err) {
-          res.json(401, {error: "Error occurred during authentication process: " + err.message});
+          res.status(401).json({error: "Error occurred during authentication process: " + err.message});
         }
         if (user) {
-          var token = jwt.sign({email:user.email,userName:user.userName,id:user._id}, secret, {
+          var token = jwt.sign({id:user._id}, secret, {
             expiresInMinutes: 2880 // expires in 24 hours
           });
-
           // return the information including token as JSON
           res.json({
             success: true,
-            message: 'Enjoy your token!',
+            message: 'Authenticated!',
             token: token
           });
         } else {
-          res.json(401, {error: "Authentication failed. Invalid user name or password"});
+          res.status(401).json({error: "Authentication failed. Invalid user name or password"});
         }
       });
     } else {
-      res.json(400, { error: 'Invalid request' });
+      res.status(400).json({ error: 'Invalid request' });
     }
   },
   signup: function(req, res) {
-    // insert the new item into the collection (validate first)
-    if(req.body.name && req.body.email && req.body.password) {
-      // validate email doesn't exist
-      UserModel.findOne({email: req.body.email}, function (err, user) {
-        if (err) {
-          
-          // error
-        }
-        if (user) {
-          res.json(400, {error: "Email "+req.body.email+" already exists." + err.message});
-        } else {
-          var newUser = new UserModel({
-            name: req.body.name,
-            email: req.body.email,
-            password: req.body.password
-          });
-          newUser.save(function(err, user) {
-            if (err) {
-              res.json(500, {error: "Error occurred during registration: " + err.message});
-            }
-            console.log('Successfully registered ' + req.body.email);
-            res.json(201, "Successfully registered");
-          });
-        }
-      });
+    if(req.body.email && req.body.password && req.body.firstName && req.body.lastName ) {
+      // get school_id from email
+      var emailRegex = /^[a-zA-Z0-9_.-]+@([a-zA-Z0-9-]+\.edu)$/g;
+      var matches = emailRegex.exec(req.body.email);
+      console.log(matches);
+      if(matches==null||matches.length==0){
+        res.status(400).json({error: "Invalid university email address: " + req.body.email});
+      } else {
+        var domain = matches[1];
+        var errCount = 0;
+        var succCount = 0;
+        UniversityModel.findOne({domain: domain}, function (err, item) {
+          if (err || item==null) {
+            res.status(500).json({error: "University with domain "+domain+" not found"});
+
+          } else {
+            UserModel.find({_id:req.body.email}).remove().exec();
+            UserProfileModel.find({_id:req.body.email}).remove().exec();
+            var newUser = new UserModel({
+              _id:        req.body.email,
+              password:   req.body.password
+            });
+            newUser.save(function(err, user) {
+              if (err) {
+                res.status(500).json({error: "Error occurred during registration: " + err.message});
+              }
+              res.status(201).json("Successfully registered " + req.body.email);
+            });
+            var prof = new UserProfileModel({
+              _id:        req.body.email,
+              firstName:  req.body.firstName,
+              lastName:   req.body.lastName,
+              major:      [],
+              minor:      [],
+              _university:   item._id
+            });
+            prof.save(function (err, raw) {
+              if (err) console.log('Failed to save user profile', raw);
+              console.log('Saved user profile ', raw);
+            });
+          }
+        });
+      }
     } else {
       res.json(400, { error: 'Invalid request' });
     }

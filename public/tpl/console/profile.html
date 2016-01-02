@@ -1,117 +1,198 @@
-<div class="wrapper-md m-r-xs m-l-xs">
-    <div class="row">
-        <div class="col-sm-8">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <div class="clearfix">
-                        <div class="pull-left m-r">
-                            <img src="img/a2.jpg" alt="...">
-                        </div>
-                        <div class="clear">
-                            <div class="h2 m-t-xs m-b-xs">
-                                Karen Li
+<div class="hbox hbox-auto-xs hbox-auto-sm">
+    <!-- main -->
+    <div class="col">
+        <!-- main header -->
+        <div class="bg-light lter b-b wrapper-lg">
+            <div class="pull-left m-r-lg post-img thumb thumb-wrapper">
+                <img src="img/b1.jpg" alt="...">
+            </div>
+            <div class="clear">
+                <div class="h2 m-t-xs m-b-xs">{{profile.firstName}} {{profile.lastName}}</div>
+                <h4>{{profile._university.name}}</h4>
+                <h5><i class="fa fa-envelope-o fa-fw text-muted m-r-xs"></i>{{profile._id}}</h5>
+                <div><small class="text-muted m-r-md">Major</small><span class="text-sm" ng-repeat="i in profile.major">{{i}}</span></div>
+                <div><small class="text-muted m-r-md">Minor</small><span class="text-sm" ng-repeat="i in profile.minor">{{i}}</span></div>
+            </div>
+        </div>
+
+        <div class="panel wrapper-lg m-b-n">
+            <div class="profile-header">
+                <span class="font-thin m-t-none m-b-md text-lg m-b-lg">My Classrooms</span>
+                <button class="btn btn-default pull-right" ng-click="addClass()"
+                        tooltip-placement="bottom" uib-tooltip="Add class to your schedule" tooltip-class="custom-tooltip">
+                    <i class="fa fa-plus"></i>
+                </button>
+            </div>
+
+            <div class="row text-center m-t-md">
+                <div class="col-xs-4" ng-repeat="course in profile.schedule">
+                    <div class="panel padder-v item b-a crm-box-wrapper">
+                        <div class="crm-box-content">
+                            <div><span><a class="h1 crm-number">{{course.courseId}}</a></span></div>
+                            <div><span><a class="text-muted text-md crm-name">{{course.name}}</a></span></div>
+                            <div><span class="text-muted text-md">{{course.professor}}</span></div>
+                            <div><span class="text-muted text-md">{{getDayStr(course.day)}}</span></div>
+                            <div><span class="text-muted text-md">{{course.startTime}} - {{course.endTime}}</span></div>
+                            <div><span class="text-muted text-md">{{course.building}} {{course.room}}</span></div>
+                            <div class="m-t-sm">
+                                <button class="btn btn-rounded btn-sm btn-icon btn-default m-r-xs" ng-click="editClass(course)"><i class="fa fa-edit"></i></button>
+                                <button class="btn btn-rounded btn-sm btn-icon btn-default" ng-click="deleteClass(course)"><i class="fa fa-trash-o"></i></button>
                             </div>
-                            <h4>University of Maryland</h4>
-                            <h5><i class="fa fa-envelope-o fa-fw text-muted m-r-xs"></i>kl123@umd.edu</h5>
-                            <div><small class="text-muted m-r-md">Major</small><span class="h5">Computer Science</span></div>
-                            <div><small class="text-muted m-r-md">Minor</small><span class="h5">Math</span></div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="panel no-border">
-                        <div class="panel-heading wrapper b-b b-light">
-                            <a class="text-muted pull-right">
-                                <i class="fa fa-pencil-square-o text-primary"></i>
-                            </a>
-                            <h4 class="font-thin m-t-none m-b-none text-muted">Work Interests</h4>
-                        </div>
-                        <pre class="bg-light lter no-border">hi</pre>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="panel no-border">
-                        <div class="panel-heading wrapper b-b b-light">
-                            <a class="text-muted pull-right">
-                                <i class="fa fa-pencil-square-o text-primary"></i>
-                            </a>
-                            <h4 class="font-thin m-t-none m-b-none text-muted">Research Interests</h4>
-                        </div>
-                        <pre class="bg-light lter no-border">hi</pre>
-                    </div>
-                </div>
-
             </div>
 
 
-        </div>
-        <div class="col-md-4 b-r b-light no-border-xs">
-            <div class="panel wrapper">
-                <a href="" class="text-muted pull-right text-lg"><i class="icon-arrow-right"></i></a>
-                <h4 class="font-thin m-t-none m-b-md text-muted">My Todos</h4>
-                <div class=" m-b">
-                    <div class="m-b">
-                        <span class="label text-base bg-warning pos-rlt m-r"><i class="arrow right arrow-warning"></i> 19:30</span>
-                        <a href="">Feed cat</a>
-                    </div>
-                    <div class="m-b">
-                        <span class="label text-base bg-info pos-rlt m-r"><i class="arrow right arrow-info"></i> 12:30</span>
-                        <a href="">Fishing Time</a>
-                    </div>
-                    <div class="m-b">
-                        <span class="label text-base bg-primary pos-rlt m-r"><i class="arrow right arrow-primary"></i> 10:30</span>
-                        <a href="">Kick-off meeting</a>
-                    </div>
-                    <div class="m-b">
-                        <span class="label text-base bg-light pos-rlt m-r"><i class="arrow right arrow-light"></i> 07:30</span>
-                        <a href="">Morning running</a>
+
+
+
+            <div class="profile-header m-t-md">
+                <span class="font-thin m-t-none m-b-md text-lg m-b-md">My Recent Posts</span>
+            </div>
+
+            <div class="row m-t-md">
+                <div class="col-lg-12">
+                    <div class="table-responsive m-t-sm">
+                        <table datatable="ng" class="table table-striped m-b-none">
+                            <thead ng-show="false">
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="question in classroom.questions">
+                                <td width="10%" align="center">
+                                    <div>{{ question.vote }}</div><div>votes</div>
+                                </td>
+                                <td width="10%" align="center">
+                                    <div>{{ question.answers==null?0:question.answers.length }}</div><div>answers</div>
+                                </td>
+                                <td>
+                                    <h4 class="question-hyperlink">
+                                        <a ui-sref="app.question({questionId: question._id })">{{ question.title }}</a>
+                                    </h4>
+                                    <div class="text-muted">
+                                        <span class="text-muted m-r-sm"><i class="fa fa-clock-o"></i> 01/01/2016 10:30am</span>
+                                        <span class="text-muted"><i class="fa fa-graduation-cap"></i> <a>CS446</a></span>
+                                    </div>
+                                    <div class="tags m-t-xxs">
+                                        <span class="post-tag bg-info m-r-xs" ng-repeat="tag in question.tags">{{tag}}</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-            </div>
-            <div class="b-b m-b-md">
-                <h4 class="font-thin m-t-none m-b-md ">My Schedule</h4>
-            </div>
-            <div class="panel wrapper">
-                <!-- streamline -->
-                <div class="m-b text-md">Monday</div>
-                <div class="streamline b-l m-b">
-                    <div class="sl-item">
-                        <div class="m-l">
-                            <div class="text-muted">08:30</div>
-                            <p>MATH 123</p>
-                        </div>
-                    </div>
-                    <div class="sl-item">
-                        <div class="m-l">
-                            <div class="text-muted">11:30</div>
-                            <p>MATH 223</p>
-                        </div>
-                    </div>
-                </div>
-                <!-- / streamline -->
-            </div>
-            <div class="panel wrapper">
-                <!-- streamline -->
-                <div class="m-b text-md">Tuesday</div>
-                <div class="streamline b-l m-b">
-                    <div class="sl-item">
-                        <div class="m-l">
-                            <div class="text-muted">08:30</div>
-                            <p>MATH 123</p>
-                        </div>
-                    </div>
-                    <div class="sl-item">
-                        <div class="m-l">
-                            <div class="text-muted">11:30</div>
-                            <p>MATH 223</p>
-                        </div>
-                    </div>
-                </div>
-                <!-- / streamline -->
+
             </div>
         </div>
+
     </div>
+    <!-- / main -->
+    <!-- right col -->
+    <div class="col w-xl bg-white-only b-l bg-auto no-border-xs">
+        <div class="cr-r-tab">
+            <uib-tabset justified="true" class="tab-content">
+                <uib-tab>
+                    <uib-tab-heading>
+                        <i class="fa fa-list-alt text-md text-muted wrapper-sm"></i>
+                        <span class="text-sm text-muted">Todos</span>
+                    </uib-tab-heading>
+                    <div class="wrapper-md">
+                        <div class="m-b-sm text-md">This week</div>
+                        <div class="streamline b-l m-b">
+                            <div class="sl-item b-info b-l">
+                                <div class="m-l">
+                                    <div class="text-muted">Wed, 25 Mar</div>
+                                    <p>
+                                        <span><i class="fa fa-edit"></i><a href="" class="text-info">edit</a></span>
+                                        <span><i class="fa fa-check-square-o m-l-sm"></i><a href="" class="text-info">complete</a></span>
+                                    </p>
+                                    <p>Finished task <a href="" class="text-info">Testing</a>.</p>
+                                </div>
+                            </div>
+                            <div class="sl-item b-info b-l">
+                                <div class="m-l">
+                                    <div class="text-muted">Thu, 10 Mar</div>
+                                    <p>Trip to the moon</p>
+                                </div>
+                            </div>
+                            <div class="sl-item b-info b-l">
+                                <div class="m-l">
+                                    <div class="text-muted">Sat, 5 Mar</div>
+                                    <p>Prepare for presentation</p>
+                                </div>
+                            </div>
+                            <div class="sl-item b-info b-l">
+                                <div class="m-l">
+                                    <div class="text-muted">Sun, 11 Feb</div>
+                                    <p><a href="" class="text-info">Jessi</a> assign you a task <a href="" class="text-info">Mockup Design</a>.</p>
+                                </div>
+                            </div>
+                            <div class="sl-item b-info b-l">
+                                <div class="m-l">
+                                    <div class="text-muted">Thu, 17 Jan</div>
+                                    <p>Follow up to close deal</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <a href="" class="btn btn-sm btn-primary padder-md m-b">More Todos</a>
+                    </div>
+                </uib-tab>
+                <uib-tab>
+                    <uib-tab-heading>
+                        <i class="fa fa-calendar text-md text-muted wrapper-sm"></i>
+                        <span class="text-sm text-muted">Schedule</span>
+                    </uib-tab-heading>
+                    <div class="wrapper-md">
+                        <div class="m-b-sm text-md">This week</div>
+                        <div class="streamline b-l m-b">
+                            <div class="sl-item b-info b-l">
+                                <div class="m-l">
+                                    <div class="text-muted">Wed, 25 Mar</div>
+                                    <p>Finished task <a href="" class="text-info">Testing</a>.</p>
+                                </div>
+                            </div>
+                            <div class="sl-item b-info b-l">
+                                <div class="m-l">
+                                    <div class="text-muted">Thu, 10 Mar</div>
+                                    <p>Trip to the moon</p>
+                                </div>
+                            </div>
+                            <div class="sl-item b-info b-l">
+                                <div class="m-l">
+                                    <div class="text-muted">Sat, 5 Mar</div>
+                                    <p>Prepare for presentation</p>
+                                </div>
+                            </div>
+                            <div class="sl-item b-info b-l">
+                                <div class="m-l">
+                                    <div class="text-muted">Sun, 11 Feb</div>
+                                    <p><a href="" class="text-info">Jessi</a> assign you a task <a href="" class="text-info">Mockup Design</a>.</p>
+                                </div>
+                            </div>
+                            <div class="sl-item b-info b-l">
+                                <div class="m-l">
+                                    <div class="text-muted">Thu, 17 Jan</div>
+                                    <p>Follow up to close deal</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
+                </uib-tab>
+            </uib-tabset>
+
+        </div>
+
+
+
+
+
+    </div>
 </div>
+

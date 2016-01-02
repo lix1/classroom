@@ -3,19 +3,33 @@ var mongoose = require('mongoose'),
     path = require('path');
 
 var schema = new Schema({
-    _id:            { type: String, lowercase: true, trim: true },
-    first_name:     { type: String, trim: true, required : true },
-    last_name:      { type: String, trim: true, required : true },
+    _id:        {   type: String, lowercase: true, trim: true,
+                    validate: {
+                        validator: function(v) {
+                            return /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+\.edu$/.test(v);
+                        },
+                        message: '{VALUE} is not a valid university email!'
+                    }},
+    firstName:     { type: String, trim: true, required : true },
+    lastName:      { type: String, trim: true, required : true },
     birthday:       { type: Date },
     gender:         { type: String, enum: ['Female', 'Male']},
     major:          [ { type: String, trim: true, uppercase: true }],
     minor:          [ { type: String, trim: true, uppercase: true }],
-    school_id:      { type: Schema.Types.ObjectId, ref: 'University' },
-    work_interest:  { type: String },
-    research_interest: { type: String },
+    _university:      { type: Schema.Types.ObjectId, ref: 'University' },
     vatus:          { type: String },
-    created_ts:     { type: Date, default: Date.now },
-    updated_ts:     { type: Date, default: Date.now }
+    schedule:   [{
+        courseId: { type: String, trim: true, uppercase: true },
+        name: { type: String, trim: true },
+        building: { type: String, trim: true },
+        day: [ { type: String, trim: true }],
+        endTime: { type: String, trim: true },
+        professor: { type: String, trim: true },
+        room: { type: String, trim: true },
+        startTime: { type: String, trim: true }
+    }],
+    createdTS:     { type: Date, default: Date.now },
+    updatedTS:     { type: Date, default: Date.now }
 });
 schema.virtual('email').get(function() {
     return this._id;

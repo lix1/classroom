@@ -8,39 +8,67 @@
       <form name="form" class="form-horizontal form-validation">
         <fieldset>
           <div class="form-group">
-            <label class="col-md-3 control-label text-right">Course Number</label>
+            <label class="col-md-3 control-label text-right">Course ID</label>
             <div class="col-md-7">
-              <input placeholder="Please enter title" class="form-control input-md" required type="text"
-                     ng-model="req.courseNumber">
+              <div course-typeahead university="5685d15964003731e5e53bd9" valid="validCourseId" course-id="req.courseId" course-name="req.name"></div>
               <span class="help-block">*required</span>
             </div>
           </div>
           <div class="form-group">
-            <label class="col-md-3 control-label text-right">Title</label>
+            <label class="col-md-3 control-label text-right">Day</label>
             <div class="col-md-7">
-              <input placeholder="Please enter title" class="form-control input-md" required type="text"
-                     ng-model="req.title">
-              <span class="help-block">*required</span>
+              <label class="checkbox-inline i-checks">
+                <input type="checkbox" name="classDay" ng-model="day.Monday"><i></i> Monday
+              </label>
+              <label class="checkbox-inline i-checks">
+                <input type="checkbox" name="classDay" ng-model="day.Tuesday"><i></i> Tuesday
+              </label>
+              <label class="checkbox-inline i-checks">
+                <input type="checkbox" name="classDay" ng-model="day.Wednesday"><i></i> Wednesday
+              </label>
+              <label class="checkbox-inline i-checks">
+                <input type="checkbox" name="classDay" ng-model="day.Thursday"><i></i> Thursday
+              </label>
+              <label class="checkbox-inline i-checks">
+                <input type="checkbox" name="classDay" ng-model="day.Friday"><i></i> Friday
+              </label>
             </div>
           </div>
           <div class="form-group">
-            <label class="col-md-3 control-label text-right">Department</label>
+            <label class="col-md-3 control-label text-right">Start Time</label>
             <div class="col-md-7">
-              <input placeholder="Please enter department" class="form-control input-md" required type="text" ng-model="req.department">
-              <span class="help-block">*required</span>
+              <uib-timepicker ng-model="startTime" hour-step="1" minute-step="5"></uib-timepicker>
             </div>
           </div>
           <div class="form-group">
-            <label class="col-md-3 control-label text-right">Description</label>
+            <label class="col-md-3 control-label text-right">End Time</label>
             <div class="col-md-7">
-              <textarea placeholder="Please enter description" rows="10" class="form-control input-md" type="text" ng-model="req.description"></textarea>
+              <uib-timepicker ng-model="endTime" hour-step="1" minute-step="5"></uib-timepicker>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-3 control-label text-right">Professor</label>
+            <div class="col-md-7">
+              <input class="form-control" type="text" ng-model="req.professor">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-3 control-label text-right">Building</label>
+            <div class="col-md-7">
+              <input class="form-control" type="text" ng-model="req.building">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-3 control-label text-right">Room</label>
+            <div class="col-md-7">
+              <input class="form-control" type="text" ng-model="req.room">
             </div>
           </div>
         </fieldset>
       </form>
       <div class="modal-footer">
-        <button class="btn btn-success" ng-click="submit()" ng-disabled="isSubmitting||form.$invalid">Submit</button>
-        <button class="btn btn-danger" ng-click="cancel()" ng-disabled="isSubmitting">Cancel</button>
+        <button class="btn btn-info" ng-click="submit()" ng-disabled="isSubmitting||form.$invalid">Submit</button>
+        <button class="btn btn-default" ng-click="cancel()" ng-disabled="isSubmitting">Cancel</button>
       </div>
     </div>
   </div>
