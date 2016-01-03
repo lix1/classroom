@@ -1,7 +1,6 @@
 var fs = require('fs'),
     path = require('path'),
     auth = require('./authentication'),
-    UniversityModel = require('../models').University,
     UserProfileModel = require('../models').UserProfile;
 module.exports = {
   getById: function(req, res) {
@@ -24,6 +23,8 @@ module.exports = {
             UserProfileModel.update({ _id: decoded.id},{ $push: { "schedule": {
                 courseId: req.body.courseId,
                 name: req.body.name,
+                semester: req.body.semester,
+                year: req.body.year,
                 building: req.body.building,
                 day: req.body.day,
                 startTime: req.body.startTime,
@@ -45,8 +46,11 @@ module.exports = {
     updateCourseInSchedule: function(req, res) {
         var decoded = auth.decodeToken(req,function(decoded){
             UserProfileModel.update({ "_id": decoded.id, "schedule._id": req.body._id},{ $set: { "schedule.$": {
+                _id: req.body._id,
                 courseId: req.body.courseId,
                 name: req.body.name,
+                semester: req.body.semester,
+                year: req.body.year,
                 building: req.body.building,
                 day: req.body.day,
                 startTime: req.body.startTime,
@@ -61,6 +65,27 @@ module.exports = {
                     res.status(200).json(doc);
                 });
             })
+        }, function(err){
+            res.json(401, { error: 'Invalid token: ' + err });
+        });
+    },
+    deleteCourseById: function(req, res) {
+        var decoded = auth.decodeToken(req,function(decoded){
+
+            UserProfileModel
+                .findOne({_id: decoded.id})
+                .select()
+                .exec(function(err, prof) {
+                    if (err) return res.json(500, { error: 'Failed to query user profile for '+decoded.id+' : ' + err });
+                    if (!prof) return res.json(500, { error: 'User profile for '+decoded.id+' not found'});
+                    prof.schedule.remove(req.params.id);
+                    prof.save(function(err, updProf) {
+                        if (err) res.json(500, { error: 'Failed to remove course from schedule : ' + err });
+                        res.status(200).json(updProf);
+
+                    });
+                });
+
         }, function(err){
             res.json(401, { error: 'Invalid token: ' + err });
         });

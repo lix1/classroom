@@ -9,7 +9,7 @@ app.controller('ProfileCtrl', ['$state','$stateParams', '$scope', '$http','$uibM
                 console.log(data)
                 $scope.profile=data;
             }).error(function(data, status, headers, config) {
-                $scope.profile={"_id":"lix1@umd.edu","firstName":"karen","lastName":"li","_university":{"_id":"5685d15964003731e5e53bd9","name":"University of Maryland, College Park","id":"5685d15964003731e5e53bd9"},"__v":0,"updatedTS":"2016-01-02T02:42:05.080Z","createdTS":"2016-01-02T02:42:05.080Z","schedule":[{"courseId":"CMSC122","name":"Introduction to Computer Programming via the Web","building":"ITE","startTime":"12:00 pm","endTime":"12:15 pm","professor":"Don Roth","room":"330","day":["Monday","Tuesday","Wednesday","Thursday","Friday"]},{"courseId":"CMSC122","name":"Introduction to Computer Programming via the Web","building":"ITE","startTime":"12:00 pm","endTime":"12:15 pm","professor":"Don Roth","room":"330","day":["Monday","Wednesday"]},{"courseId":"CMSC132","name":"Object-Oriented Programming II","startTime":"12:00 pm","endTime":"12:10 pm","_id":"5687610fc22db768240f16aa","day":["Monday","Wednesday"]},{"courseId":"CMSC198A","name":"Special Topics in Computer Science for Non-Majors","startTime":"12:00 pm","endTime":"12:10 pm","_id":"568763c387f96a1c29ce86bc","day":["Monday","Wednesday"]}],"minor":[],"major":[]};
+                $scope.profile={"_id":"lix1@umd.edu","firstName":"Karen","lastName":"Li","_university":{"_id":"5685d15964003731e5e53bd9","name":"University of Maryland, College Park","id":"5685d15964003731e5e53bd9"},"__v":0,"updatedTS":"2016-01-02T21:27:53.898Z","createdTS":"2016-01-02T21:27:53.897Z","schedule":[{"courseId":"CMSC122","name":"Introduction to Computer Programming via the Web","startTime":"10:00 am","endTime":"10:50 am","_id":"568840fb449f3dc30cb25e48","day":["Monday","Wednesday"],"year":2016,"semester":"Spring"},{"courseId":"CMSC131","name":"Object-Oriented Programming I","startTime":"01:00 pm","endTime":"02:15 pm","_id":"5688413b449f3dc30cb25e49","day":["Monday","Wednesday"],"year":2016,"semester":"Spring"}],"minor":[],"major":[]};
             });
 
     }
@@ -50,6 +50,25 @@ app.controller('ProfileCtrl', ['$state','$stateParams', '$scope', '$http','$uibM
 
         });
     }
+    $scope.deleteClass = function(course) {
+        var modalInstance = $uibModal.open({
+            templateUrl: 'tpl/console/modal/deleteObjectModal.html',
+            controller: 'DeleteObjectModalCtrl',
+            size: 'lg',
+            resolve: {
+                items: function () {
+                    var items = {};
+                    items.url = '/api/profile/schedule/'+course._id,
+                    items.message = 'Remove course <span class="text-info-dk">' + course.name + '</span> from your schedule? This cannot be undone.';
+                    return items;
+                }
+            }
+        });
+        modalInstance.result.then(function (data) {
+            $scope.profile.schedule = data.schedule;
+
+        });
+    }
 
     $scope.getDayStr = function(dayArr) {
         var str = '';
@@ -79,6 +98,7 @@ app.controller('ProfileCtrl', ['$state','$stateParams', '$scope', '$http','$uibM
 }]);
     app.controller('ManageCourseModalCtrl', ['$scope','$uibModalInstance','$http','items', function ($scope,$uibModalInstance,$http,items) {
         $scope.req={};
+        $scope.course={};
         $scope.allday=['Monday','Tuesday','Wednesday','Thursday','Friday'];
         $scope.day=[];
         $scope.startTime=null;
@@ -89,13 +109,11 @@ app.controller('ProfileCtrl', ['$state','$stateParams', '$scope', '$http','$uibM
 
         var d = new Date();
         if(items!=null&&items.class!=null){
-            console.log(items.class)
-
             isCreate=false;
             $scope.modalTitle='Edit ' + items.class.name;
             $scope.req._id=items.class._id;
-            $scope.req.courseId=items.class.courseId;
-            $scope.req.name=items.class.name;
+            $scope.course.courseId=items.class.courseId;
+            $scope.course.courseName=items.class.name;
 
             var st = new Date();
             var stMoment = moment(items.class.startTime, "hh:mm a")
@@ -124,8 +142,12 @@ app.controller('ProfileCtrl', ['$state','$stateParams', '$scope', '$http','$uibM
         }
         $scope.isSubmitting=false;
 
-
         $scope.submit = function() {
+            $scope.req.courseId=$scope.course.courseId;
+            $scope.req.name=$scope.course.courseName;
+            $scope.req.semester='Spring';
+            $scope.req.year='2016';
+
             $scope.req.day=[];
             if((isCreate && ($scope.startTime!=d || $scope.endTime!=d)) || !isCreate){
                 var startTimeM = moment($scope.startTime).format("hh:mm a");
@@ -139,8 +161,6 @@ app.controller('ProfileCtrl', ['$state','$stateParams', '$scope', '$http','$uibM
                     $scope.req.day.push(e);
                 }
             });
-            console.log($scope.req)
-
             $scope.isSubmitting=true;
             $http({
                 method: isCreate?'POST':'PUT',

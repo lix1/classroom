@@ -5,6 +5,7 @@ var home = require('../app/controllers/home'),
     course = require('../app/controllers/course'),
     question = require('../app/controllers/question'),
     answer = require('../app/controllers/answer'),
+    classroom = require('../app/controllers/classroom'),
     university = require('../app/controllers/university');
 var jwt = require('jsonwebtoken');
 
@@ -28,6 +29,9 @@ module.exports.initialize = function(app, router) {
     router.get('/api/profile' ,profile.getById);
     router.post('/api/profile/schedule' ,profile.addCourseToSchedule);
     router.put('/api/profile/schedule' ,profile.updateCourseInSchedule);
+    router.delete('/api/profile/schedule/:id' ,profile.deleteCourseById);
+
+    router.get('/api/classroom/:year/:semester/:courseId' ,classroom.findByCourse);
 
 
     app.get('/classroom', function(req, res){

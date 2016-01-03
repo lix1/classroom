@@ -4,7 +4,7 @@ app.directive('courseTypeahead', ['$http','uiLoad',function($http,uiLoad) {
     replace: true,
     transclude: true,
     scope: {
-      university: "@",valid:"@",courseId:"=",courseName:"="
+      university: "@",valid:"@",courseId:"=",courseName:"=",ngModel:"="
     },
     template: 	'<div class="twitter-typeahead"><input class="typeahead form-control" type="text"></div>',
     link: function ($scope, element, attrs) {
@@ -58,7 +58,9 @@ app.directive('courseTypeahead', ['$http','uiLoad',function($http,uiLoad) {
             suggestion: Handlebars.compile('<div class="b-b"><h4>{{courseId}}</h4><span>{{name}}</span></div>')
           }
         });
-        element.find('input.typeahead').typeahead('val', $scope.courseId);
+        if($scope.ngModel!=null&&$scope.ngModel.courseId!=null){
+          element.find('input.typeahead').typeahead('val', $scope.ngModel.courseId);
+        }
         element.on('typeahead:change', function(ev, val) {
           if(courseIds.indexOf(val)==-1){
             element.find('input.tt-input').addClass('has-error');
@@ -66,13 +68,14 @@ app.directive('courseTypeahead', ['$http','uiLoad',function($http,uiLoad) {
           } else {
             element.find('input.tt-input').removeClass('has-error');
             $scope.valid = true;
-            $scope.courseId = val;
-            $scope.courseName=courseMap[$scope.courseId];
+            $scope.ngModel.courseId = val;
+            $scope.ngModel.courseName=courseMap[val];
           }
         });
-        element.on('typeahead:select', function(ev, suggestion) {
-          $scope.courseId = suggestion.courseId;
-        });
+        //element.on('typeahead:select', function(ev, suggestion) {
+        //  $scope.courseId = suggestion.courseId;
+        //  $scope.courseName = suggestion.name;
+        //});
 
       })
     }

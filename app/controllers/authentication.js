@@ -37,7 +37,6 @@ module.exports = {
       // get school_id from email
       var emailRegex = /^[a-zA-Z0-9_.-]+@([a-zA-Z0-9-]+\.edu)$/g;
       var matches = emailRegex.exec(req.body.email);
-      console.log(matches);
       if(matches==null||matches.length==0){
         res.status(400).json({error: "Invalid university email address: " + req.body.email});
       } else {

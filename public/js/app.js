@@ -14,6 +14,7 @@ var app = angular.module('app', [
     'ui.validate',
     'ui.router.tabs',
     'oc.lazyLoad',
+        'app.commonCtrl',
         'app.accessCtrl',
         'app.consoleHomeCtrl',
     'app.consoleHospitalCtrl',
@@ -79,9 +80,19 @@ var app = angular.module('app', [
                 }
             })
             .state('app.classroom', {
-                url: '/classroom/:classroomId',
+                url: '/classroom/:year/:semester/:courseId',
                 controller: 'ClassroomCtrl',
-                templateUrl:'tpl/console/classroom.html'
+                templateUrl:'tpl/console/classroom.html',
+                resolve: {
+                    deps: ['uiLoad',
+                        function( uiLoad ){
+                            return uiLoad.load( [
+                                'js/libs/bootstrap-tagsinput/src/bootstrap-tagsinput-angular.js',
+                                'js/libs/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js',
+                                'js/libs/bootstrap-tagsinput/src/bootstrap-tagsinput.css'
+                            ]);
+                        }]
+                }
             })
             .state('app.calendar', {
                 url: '/calendar/:classroomId',
@@ -97,10 +108,7 @@ var app = angular.module('app', [
                     deps: ['uiLoad',
                         function( uiLoad ){
                             return uiLoad.load( [
-                                'js/controllers/post.js',
-                                'js/libs/bootstrap-tagsinput/src/bootstrap-tagsinput-angular.js',
-                                'js/libs/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js',
-                                'js/libs/bootstrap-tagsinput/src/bootstrap-tagsinput.css'
+                                'js/controllers/post.js'
                             ]);
                         }]
                 }

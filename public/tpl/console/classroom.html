@@ -14,7 +14,7 @@
 
 <ul class="breadcrumb bg-light lter b-b wrapper-md m-n">
     <li><a ui-sref="app.home"><i class="fa fa-home"></i> Home </a>
-    <li class="active"><i class="fa fa-users"></i> {{classroom.courseNumber}} - {{classroom.title}}</li>
+    <li class="active"><i class="fa fa-users"></i> {{classroom.courseId}}</li>
 </ul>
 
 
@@ -27,27 +27,58 @@
         <div class="bg-light lter b-b wrapper-md">
             <div class="row">
                 <div class="col-sm-6 col-xs-12">
-                    <h1 class="m-n font-thin h3 text-black">CS101</h1>
-                    <small class="text-muted">Computer Sciencr Intro</small>
+                    <h1 class="m-n font-thin h3 text-black">{{classroom.courseId}}</h1>
+                    <small class="text-muted">{{classroom.name}}</small>
                 </div>
                 <div class="col-sm-6 text-right hidden-xs">
                     <div class="inline m-r text-left">
-                        <div class="m-b-xs">100 <span class="text-muted">students</span></div>
+                        <div class="m-b-xs">{{classroom._members.length}} <span class="text-muted">members</span></div>
                     </div>
                     <div class="inline text-left">
                         <div class="m-b-xs">200 <span class="text-muted">groups</span></div>
                     </div>
                     <div class="m-t-sm text-right">
-                        <button class="btn btn-info" ng-click="askQuestion()">New Post</button>
+                        <button class="btn btn-info" ng-click="join()">Join</button>
+                        <button class="btn btn-info" ng-click="isNewPostCollapsed = !isNewPostCollapsed">New Post</button>
                     </div>
                 </div>
             </div>
         </div>
+        <div uib-collapse="isNewPostCollapsed">
+            <div class="panel wrapper cr-l-panel b-b">
+                <div class="wrapper-md">
+                    <h4 class="m-b">New Post<a class="pull-right" ng-click="isNewPostCollapsed = !isNewPostCollapsed"><i class="fa fa-caret-square-o-up text-muted"></i></a></h4>
+                    <form class="ng-pristine ng-valid b-t" ng-submit="answerQuestion('editor1')">
+                        <div class="form-group m-t">
+                            <label>Tags <span class="text-muted">press enter to add tags</span></label>
+                            <div bootstrap-tagsinput></div>
+                        </div>
+                        <div class="form-group">
+                            <div crm-editor id="classroom._id"></div>
+                        </div>
+                        <div class="form-group">
+                            <div class="pull-left">
+                                <div class="checkbox m-r-md">
+                                    <label class="i-checks">
+                                        <input type="checkbox"><i></i> Post as anonymous
+                                    </label>
+                                </div>
+
+                            </div>
+                            <button type="submit" class="btn btn-info"><i class="fa fa-paper-plane-o"></i> Post</button>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
         <!-- / main header -->
         <div class="panel wrapper cr-l-panel">
 
             <div class="table-responsive m-t-sm">
-                <table datatable="ng" class="table table-striped m-b-none">
+                <table datatable="ng" class="table table-striped m-b-none" dt-options="dtOptions" >
                     <thead ng-show="false">
                     <th></th>
                     <th></th>
@@ -71,49 +102,6 @@
                             <div class="pull-right">
                                 <p>asked 10 mins ago by Karen Li</p>
                             </div>
-                        </td>
-                    </tr>
-
-                    <tr ng-repeat="question in classroom.questions">
-                        <td width="10%" align="center">
-                            <div>{{ question.vote }}</div><div>votes</div>
-                        </td>
-                        <td width="10%" align="center">
-                            <div>{{ question.answers==null?0:question.answers.length }}</div><div>answers</div>
-                        </td>
-                        <td>
-                            <h4 class="question-hyperlink">
-                                <a ui-sref="app.question({questionId: question._id })">{{ question.title }}</a>
-                            </h4>
-                            <div class="tags"><span class="post-tag bg-info m-r-xs" ng-repeat="tag in question.tags">tag</span></div>
-                        </td>
-                    </tr>
-                    <tr ng-repeat="question in classroom.questions">
-                        <td width="10%" align="center">
-                            <div>{{ question.vote }}</div><div>votes</div>
-                        </td>
-                        <td width="10%" align="center">
-                            <div>{{ question.answers==null?0:question.answers.length }}</div><div>answers</div>
-                        </td>
-                        <td>
-                            <h4 class="question-hyperlink">
-                                <a ui-sref="app.question({questionId: question._id })">{{ question.title }}</a>
-                            </h4>
-                            <div class="tags"><span class="post-tag bg-info m-r-xs" ng-repeat="tag in question.tags">tag</span></div>
-                        </td>
-                    </tr>
-                    <tr ng-repeat="question in classroom.questions">
-                        <td width="10%" align="center">
-                            <div>{{ question.vote }}</div><div>votes</div>
-                        </td>
-                        <td width="10%" align="center">
-                            <div>{{ question.answers==null?0:question.answers.length }}</div><div>answers</div>
-                        </td>
-                        <td>
-                            <h4 class="question-hyperlink">
-                                <a ui-sref="app.question({questionId: question._id })">{{ question.title }}</a>
-                            </h4>
-                            <div class="tags"><span class="post-tag bg-info m-r-xs" ng-repeat="tag in question.tags">tag</span></div>
                         </td>
                     </tr>
                     </tbody>

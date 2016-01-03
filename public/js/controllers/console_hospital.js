@@ -1,19 +1,45 @@
 'use strict';
 
 angular.module('app.consoleHospitalCtrl', ['datatables'])
-    .controller('ClassroomCtrl', ['$state','$stateParams', '$scope', '$http','$uibModal', function($state,$stateParams, $scope, $http,$uibModal) {
-        $scope.isCollapsed = true;
+    .controller('ClassroomCtrl', ['$state','$stateParams', '$scope', '$http','$uibModal', 'DTOptionsBuilder', function($state,$stateParams,$scope,$http,$uibModal,DTOptionsBuilder) {
+
+        $scope.isNewPostCollapsed = true;
+        $scope.dtOptions = DTOptionsBuilder.newOptions().withDisplayLength(50)
+            .withLanguage({
+                "sEmptyTable":     "No posts in this classroom yet",
+                "sInfo":           "Showing _START_ to _END_ of _TOTAL_ posts",
+                "sInfoEmpty":      "Showing 0 to 0 of 0 posts",
+                "sInfoFiltered":   "(filtered from _MAX_ total posts)",
+                "sInfoPostFix":    "",
+                "sInfoThousands":  ",",
+                "sLengthMenu":     "Show _MENU_ posts",
+                "sLoadingRecords": "Loading...",
+                "sProcessing":     "Processing...",
+                "sSearch":         "Search:",
+                "sZeroRecords":    "No matching posts found",
+                "oPaginate": {
+                    "sFirst":    "First",
+                    "sLast":     "Last",
+                    "sNext":     "Next",
+                    "sPrevious": "Previous"
+                }
+            });;
+
         var init = function(){
-            $http.get("/api/course?id="+$stateParams.classroomId)
+            $http.get("/api/classroom/"+$stateParams.year+"/"+$stateParams.semester+"/"+$stateParams.courseId)
                 .success(function (data) {
                     console.log(data)
                     $scope.classroom=data;
                 }).error(function(data, status, headers, config) {
-                    $scope.classroom={"_id":"563ee3ff2d686230d935e830","courseNumber":"CS446","department":"CS","description":"Machine Learning","title":"Machine Learning","questions":[{"_id":"563efdaaee8a06400bd4b41d","tags":["tag1","tag2","tag3","tag4","tag5"],"title":"Title","details":"Question","courseId":"563ee3ff2d686230d935e830","authorId":"563e904edb14c0253b811e2a","__v":0,"vote":0,"date":"2015-11-08T07:45:46.021Z"},{"_id":"563efe3fee8a06400bd4b41e","title":"Title","details":"Question","courseId":"563ee3ff2d686230d935e830","authorId":"563e904edb14c0253b811e2a","__v":0,"vote":0,"date":"2015-11-08T07:48:15.116Z"},{"_id":"563f63f1c533141b61fb8bf0","title":"How to build a web app?","details":"Google it.","courseId":"563ee3ff2d686230d935e830","authorId":"563f63aac533141b61fb8bef","__v":0,"vote":0,"date":"2015-11-08T15:02:09.168Z"}]};
+                    $scope.classroom={"__v":0,"courseId":"CMSC122","name":"Introduction to Computer Programming via the Web","semester":"Spring","year":2016,"_id":"56885dd41109bd1a3c4539de","updatedTS":"2016-01-02T23:31:32.010Z","createdTS":"2016-01-02T23:31:32.010Z","_members":[]};
                 });
         }
         init();
 
+
+
+
+        // todo: delete later
         $scope.askQuestion = function() {
             var modalInstance = $uibModal.open({
                 templateUrl: 'tpl/console/modal/ManageQuestionModal.html',

@@ -1,7 +1,6 @@
 var fs = require('fs'),
   path = require('path'),
     question = require('./question'),
-    answer = require('./answer'),
     CourseModel = require('../models').Course;
 
 module.exports = {

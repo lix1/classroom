@@ -13,7 +13,7 @@ var schema = new Schema({
     lastLoginTS: { type: Date },
     password:   { type: String, required : true },
     isVerified: {type : Boolean, default : false},
-    secRoles:  [{type: Schema.Types.ObjectId, ref: 'SecurityRole' }],
+    _secRoles:  [{type: Schema.Types.ObjectId, ref: 'SecurityRole' }],
     createdTS: { type: Date, default: Date.now },
     updatedTS: { type: Date, default: Date.now }
 });
