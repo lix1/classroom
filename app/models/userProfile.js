@@ -3,13 +3,13 @@ var mongoose = require('mongoose'),
     path = require('path');
 
 var schema = new Schema({
-    _id:        {   type: String, lowercase: true, trim: true,
-                    validate: {
-                        validator: function(v) {
-                            return /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+\.edu$/.test(v);
-                        },
-                        message: '{VALUE} is not a valid university email!'
-                    }},
+    email:        {type: String, lowercase: true, trim: true,
+        validate: {
+            validator: function(v) {
+                return /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+\.edu$/.test(v);
+            },
+            message: '{VALUE} is not a valid university email!'
+        }},
     firstName:     { type: String, trim: true, required : true },
     lastName:      { type: String, trim: true, required : true },
     birthday:       { type: Date },
@@ -30,11 +30,11 @@ var schema = new Schema({
         room: { type: String, trim: true },
         startTime: { type: String, trim: true }
     }],
-    createdTS:     { type: Date, default: Date.now },
-    updatedTS:     { type: Date, default: Date.now }
+    updatedAt:     { type: Date, default: Date.now }
 });
-schema.virtual('email').get(function() {
-    return this._id;
+
+schema.pre('update', function() {
+    this.update({},{ $set: { updatedAt: new Date() } });
 });
 
 // set up a mongoose model and pass it using module.exports

@@ -6,7 +6,7 @@ module.exports = {
   getById: function(req, res) {
     var decoded = auth.decodeToken(req,function(decoded){
       UserProfileModel
-          .findOne({_id: decoded.id})
+          .findOne({email: decoded.email})
           .populate('_university', '_id name')
           .exec(function (err, user) {
             if (err) {
@@ -20,7 +20,7 @@ module.exports = {
   },
     addCourseToSchedule: function(req, res) {
         var decoded = auth.decodeToken(req,function(decoded){
-            UserProfileModel.update({ _id: decoded.id},{ $push: { "schedule": {
+            UserProfileModel.update({ email: decoded.email},{ $push: { "schedule": {
                 courseId: req.body.courseId,
                 name: req.body.name,
                 semester: req.body.semester,
@@ -35,7 +35,7 @@ module.exports = {
                 if (err) {
                     res.json(500, { error: 'Failed to add course to schedule : ' + err });
                 }
-                UserProfileModel.findOne({_id: decoded.id}, 'schedule', function(err, doc){
+                UserProfileModel.findOne({email: decoded.email}, 'schedule', function(err, doc){
                     res.status(200).json(doc);
                 });
             })
@@ -45,7 +45,7 @@ module.exports = {
     },
     updateCourseInSchedule: function(req, res) {
         var decoded = auth.decodeToken(req,function(decoded){
-            UserProfileModel.update({ "_id": decoded.id, "schedule._id": req.body._id},{ $set: { "schedule.$": {
+            UserProfileModel.update({ "email": decoded.email, "schedule._id": req.body._id},{ $set: { "schedule.$": {
                 _id: req.body._id,
                 courseId: req.body.courseId,
                 name: req.body.name,
@@ -73,7 +73,7 @@ module.exports = {
         var decoded = auth.decodeToken(req,function(decoded){
 
             UserProfileModel
-                .findOne({_id: decoded.id})
+                .findOne({email: decoded.email})
                 .select()
                 .exec(function(err, prof) {
                     if (err) return res.json(500, { error: 'Failed to query user profile for '+decoded.id+' : ' + err });

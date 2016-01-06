@@ -1,90 +1,103 @@
 var fs = require('fs'),
   path = require('path'),
     auth = require('./authentication'),
-    CourseModel = require('../models').Course,
-    UniversityModel = require('../models').University,
-  ClassroomModel = require('../models').Classroom;
+  PostModel = require('../models').Post,
+    CommentModel = require('../models').Comment;
+var async = require('async');
 
 module.exports = {
-  findById:function(req, res) {
-    CourseModel.findOne({_id: id}, function (err, course) {
-      if (err) {
-        err(err);
+  findBySlug: function(req, res) {
+    async.waterfall([
+      function(callback) {
+        PostModel.findOne({'forumRef' : { $regex : new RegExp('^'+req.params.forumRef+'$', "i") }, 'forumSlug' : { $regex : new RegExp('^'+req.params.forumSlug+'$', "i") }, 'slug' : { $regex : new RegExp('^'+req.params.slug+'$', "i") }, 'uid' : req.params.uid})
+            .populate('createdBy', '_id firstName lastName')
+            .exec(function (err, post) {
+              if (err) {
+                return callback(new Error("Failed to query post"), 500);
+              } else if(!post) {
+                return callback(new Error("Post not found"), 404);
+              } else {
+                callback(null, post.toJSON());
+              }
+            });
+      },
+      function(post, callback) {
+        CommentModel.find({_post: post._id})
+            .populate('createdBy', 'email firstName lastName')
+            .sort( [['_id', -1]] )
+            .exec(function (err, comments) {
+              if (err) {
+                return callback(new Error("Failed to query comments"), 500);
+              } else if(!comments) {
+                return callback(new Error("No comments found"), 404);
+              } else {
+                callback(null, post, comments);
+              }
+            });
+      },
+      function(post, comments, callback) {
+        post.replies = comments;
+        callback(null, post);
       }
-      callback(course);
+    ], function (err, result) {
+      if(err){
+        res.status(result).json({error: err});
+      }
+      res.status(200).json(result);
     });
   },
-  findByCourse:function(req, res) {
-    var year = req.params.year
-        , semester = req.params.semester
-        , courseId = req.params.courseId;
-    var decoded = auth.decodeToken(req,function(decoded) {
-      ClassroomModel.findOne({'year' : year, 'semester' : semester, 'courseId' : courseId})
-          .populate('_members', '_id firstName lastName')
-          .populate('_parent', '_id')
-          .exec(function (err, doc) {
-            if (err){
-              res.json(500, {error: "Failed to query classroom for " + courseId});
-            } else if (!doc) {
-              var emailRegex = /^[a-zA-Z0-9_.-]+@([a-zA-Z0-9-]+\.edu)$/g;
-              var matches = emailRegex.exec(decoded.id);
-              var domain = matches[1];
-              UniversityModel.findOne({'domain': domain, 'courses.courseId': courseId}, {'courses.$': 1}, function (err, university) {
-                if (err) {
-                  res.status(500).json({error: "Failed to query university with domain "+domain+" : " + err});
-                } else if (!university) {
-                  res.status(500).json({error: "University with domain "+domain+" not found"});
-                }else {
-                  var courseName = university.courses[0].name;
-                  var newClassroom = new ClassroomModel({
-                    courseId: courseId,
-                    name: courseName,
-                    semester: semester,
-                    year: year
-                  });
-                  newClassroom.save(function(err, classroom) {
-                    if (err) {
-                      res.json(500, {error: "Error creating new classroom: " + err.message});
-                    }
-                    res.status(201).json(classroom);
-                  });
-                }
-              });
-            } else {
-              res.status(200).json(doc);
-            }
-
-          })
-    })
-
+  findByForum: function(req, res) {
+    var model = require('../models')[req.params.forumRef];
+    model.findOne({slug: req.params.forumSlug}, function (err, forum) {
+      if (err) {
+        res.status(500).json({ error: 'Failed to query ' + req.params.forumRef });
+      } else if(!forum) {
+        res.status(500).json({ error: req.params.forumRef + ' not found'});
+      } else {
+        PostModel.find({'forumRef' : req.params.forumRef, 'forumSlug' : { $regex : new RegExp('^'+req.params.forumSlug+'$', "i") }})
+            .populate('createdBy', 'email firstName lastName')
+            .sort( [['_id', -1]] )
+            .exec(function (err, doc) {
+              if (err) {
+                res.status(500).json({ error: 'Failed to query posts: ' + err });
+              } else if(!doc) {
+                res.status(404).json({ error: 'No posts found'});
+              } else {
+                res.status(200).json(doc);
+              }
+            });
+      }
+    });
   },
   create: function(req, res) {
-    if(req.body.title && req.body.courseNumber && req.body.department) {
-      // validate course doesn't exist
-      CourseModel.findOne({courseNumber: req.body.courseNumber}, function (err, course) {
-        if (err) {
-          // error
-        }
-        if(course){
-          res.json(500, {error: "Course with course number " + req.query.courseNumber + " already exists"});
-        }
-        var newCourse = new CourseModel({
-          title: req.body.title,
-          courseNumber: req.body.courseNumber,
-          description: req.body.description,
-          department: req.body.department
-        });
-        newCourse.save(function(err, newCourse) {
+    if(req.body.title && req.body.content && req.body.forumId && req.body.forumRef) {
+      var decoded = auth.decodeToken(req,function(decoded) {
+        var model = require('../models')[req.body.forumRef];
+        model.findOne({_id: req.body.forumId}, function (err, forum) {
           if (err) {
-            // error handling
-            res.json(500, {error: "Error creating new course: " + err.message});
+            res.status(500).json({ error: 'Failed to query ' + req.body.forumRef });
+          } else if(!forum) {
+            res.status(500).json({ error: req.body.forumRef + ' not found'});
+          } else {
+            var post = new PostModel({
+              title:    req.body.title,
+              content:  req.body.content,
+              tags:  req.body.tags,
+              forumSlug:  forum.slug,
+              forumRef:  req.body.forumRef,
+              anonymous:  req.body.anonymous,
+              createdBy:  decoded.id,
+              updatedBy:  decoded.id
+            });
+            post.save(function (err, doc) {
+              if (err) res.status(500).json({ error: 'Failed to create new post: ' + err });
+              res.status(201).json(doc)
+            });
           }
-          console.log('Successfully created new course ' + newCourse.courseNumber);
-          res.json(201, newCourse)
         });
-      });
+      })
     } else {
-      res.json(500, { error: 'Invalid request: missing required field(s)' });
+      res.status(500).json({ error: 'Invalid request: missing required field(s)' });
     }
   }
 };

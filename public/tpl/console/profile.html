@@ -9,7 +9,7 @@
             <div class="clear">
                 <div class="h2 m-t-xs m-b-xs">{{profile.firstName}} {{profile.lastName}}</div>
                 <h4>{{profile._university.name}}</h4>
-                <h5><i class="fa fa-envelope-o fa-fw text-muted m-r-xs"></i>{{profile._id}}</h5>
+                <h5><i class="fa fa-envelope-o fa-fw text-muted m-r-xs"></i>{{profile.email}}</h5>
                 <div><small class="text-muted m-r-md">Major</small><span class="text-sm" ng-repeat="i in profile.major">{{i}}</span></div>
                 <div><small class="text-muted m-r-md">Minor</small><span class="text-sm" ng-repeat="i in profile.minor">{{i}}</span></div>
             </div>

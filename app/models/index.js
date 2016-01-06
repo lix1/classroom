@@ -6,4 +6,6 @@ module.exports = {
   'Answer': require('./answer'),
   'University': require('./university'),
   'Classroom': require('./classroom'),
+  'Post': require('./post'),
+  'Comment': require('./comment'),
 };

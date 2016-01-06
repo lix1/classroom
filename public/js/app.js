@@ -80,7 +80,7 @@ var app = angular.module('app', [
                 }
             })
             .state('app.classroom', {
-                url: '/classroom/:year/:semester/:courseId',
+                url: '/classroom/:slug',
                 controller: 'ClassroomCtrl',
                 templateUrl:'tpl/console/classroom.html',
                 resolve: {
@@ -100,8 +100,8 @@ var app = angular.module('app', [
                 templateUrl:'tpl/console/calendar.html'
 
             })
-            .state('app.question', {
-                url: '/question/:questionId',
+            .state('app.classroomPost', {
+                url: '/classroom/:classroomSlug/:uid/:slug',
                 controller: 'PostCtrl',
                 templateUrl:'tpl/console/post.html',
                 resolve: {

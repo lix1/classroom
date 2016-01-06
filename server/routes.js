@@ -5,6 +5,8 @@ var home = require('../app/controllers/home'),
     course = require('../app/controllers/course'),
     question = require('../app/controllers/question'),
     answer = require('../app/controllers/answer'),
+    post = require('../app/controllers/post'),
+    comment = require('../app/controllers/comment'),
     classroom = require('../app/controllers/classroom'),
     university = require('../app/controllers/university');
 var jwt = require('jsonwebtoken');
@@ -32,7 +34,13 @@ module.exports.initialize = function(app, router) {
     router.delete('/api/profile/schedule/:id' ,profile.deleteCourseById);
 
     router.get('/api/classroom/:year/:semester/:courseId' ,classroom.findByCourse);
+    router.get('/api/classroom/:slug' ,classroom.findBySlug);
+    router.put('/api/classroom' ,classroom.update);
 
+    router.get('/api/post/:forumRef/:forumSlug/:uid/:slug', post.findBySlug);
+    router.get('/api/post/:forumRef/:forumSlug', post.findByForum);
+    router.post('/api/post', post.create);
+    router.post('/api/comment', comment.create);
 
     app.get('/classroom', function(req, res){
         res.render('index.jade');

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('app.consoleHospitalCtrl', ['datatables'])
-    .controller('ClassroomCtrl', ['$state','$stateParams', '$scope', '$http','$uibModal', 'DTOptionsBuilder', function($state,$stateParams,$scope,$http,$uibModal,DTOptionsBuilder) {
+    .controller('ClassroomCtrl', ['$state','$stateParams', '$scope', '$http','$uibModal','CRMEditor','DTOptionsBuilder', function($state,$stateParams,$scope,$http,$uibModal,CRMEditor,DTOptionsBuilder) {
 
         $scope.isNewPostCollapsed = true;
         $scope.dtOptions = DTOptionsBuilder.newOptions().withDisplayLength(50)
@@ -26,18 +26,63 @@ angular.module('app.consoleHospitalCtrl', ['datatables'])
             });;
 
         var init = function(){
-            $http.get("/api/classroom/"+$stateParams.year+"/"+$stateParams.semester+"/"+$stateParams.courseId)
+            $http.get("/api/classroom/"+$stateParams.slug)
                 .success(function (data) {
                     console.log(data)
                     $scope.classroom=data;
                 }).error(function(data, status, headers, config) {
                     $scope.classroom={"__v":0,"courseId":"CMSC122","name":"Introduction to Computer Programming via the Web","semester":"Spring","year":2016,"_id":"56885dd41109bd1a3c4539de","updatedTS":"2016-01-02T23:31:32.010Z","createdTS":"2016-01-02T23:31:32.010Z","_members":[]};
                 });
+            $http.get("/api/post/Classroom/"+$stateParams.slug)
+                .success(function (data) {
+                    console.log(data)
+                    $scope.posts=data;
+                }).error(function(data, status, headers, config) {
+                    $scope.posts=[{"_id":"56898ecc5c29b7f076eeab2d","uid":"6898ecc2d","slug":"question-2","title":"Question 2","content":"<p>Hello, this is question 2</p>","forumSlug":"Spring-2016-CMSC122","forumRef":"Classroom","createdBy":null,"updatedBy":"56896997b8518de0332f2d08","__v":0,"updatedTS":"2016-01-03T21:12:44.951Z","replyCount":0,"viewCount":0,"voteCount":0,"anonymous":false,"tags":["hello"],"createdTS":"2016-01-03T21:12:44.000Z","url":"/Spring-2016-CMSC122/6898ecc2d/question-2","id":"56898ecc5c29b7f076eeab2d"},{"_id":"56896d6ce59ca3703a46b358","slug":"hello","title":"Hello","content":"<p>hello.. my first post</p>","forumSlug":"Spring-2016-CMSC122","forumRef":"Classroom","createdBy":null,"updatedBy":"56896997b8518de0332f2d08","__v":0,"updatedTS":"2016-01-03T18:50:20.067Z","replyCount":0,"viewCount":0,"voteCount":0,"anonymous":true,"tags":["hellowprld"],"createdTS":"2016-01-03T18:50:20.000Z","url":"/Spring-2016-CMSC122/undefined/hello","id":"56896d6ce59ca3703a46b358"}];
+                });
         }
         init();
 
+        $scope.getPostedTime = function(time){
+            var postMt = moment(time);
+            var now = moment();
+            var days = now.diff(postMt, 'days');
+            if(days < 1) {
+                var hours = now.diff(postMt, 'hours');
+                if(hours < 1){
+                    var minutes = now.diff(postMt, 'minutes');
+                    if(minutes < 1) {
+                        var seconds = now.diff(postMt, 'seconds');
+                        return seconds + ' seconds ago';
+                    } else {
+                        return minutes + ' minutes ago';
+                    }
+                } else {
+                    return hours + ' hours ago';
+                }
+            //} else if(days >= 1 && days <=3) {
+            //    return days + ' days ago';
+            } else {
+                return postMt.format('YYYY-MM-DD HH:mm:ss');
+            }
+        }
 
-
+        $scope.isSubmitting=false;
+        $scope.addNewPost = function() {
+            $scope.newPost.content = CRMEditor.getValue($scope.classroom._id);
+            $scope.newPost.forumId = $scope.classroom._id;
+            $scope.newPost.forumRef = 'Classroom';
+            $scope.isSubmitting=true;
+            console.log($scope.newPost)
+            $http.put('/api/classroom',{});
+            $http.post('/api/post',$scope.newPost).
+                success(function(data, status, headers, config) {
+                    $scope.isSubmitting=false;
+                }).
+                error(function(data, status, headers, config) {
+                    $scope.isSubmitting=false;
+                });
+        }
 
         // todo: delete later
         $scope.askQuestion = function() {

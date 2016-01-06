@@ -21,7 +21,6 @@ app.directive('bootstrapTagsinput', [function(uiLoad) {
     replace: false,
     link: function(scope, element, attrs) {
       $(function() {
-        console.log('bootstrapTagsinput')
         if (!angular.isArray(scope.model))
           scope.model = [];
 

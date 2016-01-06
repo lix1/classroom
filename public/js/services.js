@@ -9,6 +9,9 @@ angular.module('app.services', [])
     return {
       getValue: function(id) {
         return CKEDITOR.instances[id].getData();
+      },
+      clear: function(id) {
+        return CKEDITOR.instances[id].setData('');
       }
     };
   });

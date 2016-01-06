@@ -11,16 +11,18 @@
             <div class="row">
                 <div class="text-center col-lg-12">
                     <a class="thumb-wrapper thumb post-img">
-                        <img src="img/b0.jpg">
+                        <img src="img/b0.jpg" ng-if="post.anonymous!=true">
+                        <img src="img/a2.jpg" ng-if="post.anonymous">
                     </a>
                 </div>
                 <div class="text-center col-lg-12 m-t-md">
-                    <div class="text-xs block m-t-xs"><i class="fa fa-user text-muted"></i> <a href="" class="m-r-sm">{{post.author.userName}}</a></div>
-                    <div class="text-xs block m-t-xs"><i class="fa fa-clock-o text-muted"></i> {{post.date}}</div>
+                    <div class="text-xs block m-t-xs" ng-if="post.anonymous!=true"><i class="fa fa-user text-muted"></i> <a href="" class="m-r-sm">{{post.createdBy.firstName}} {{post.createdBy.lastName}}</a></div>
+                    <div class="text-xs block m-t-xs" ng-if="post.anonymous"><i class="fa fa-user text-muted"></i> <a href="" class="m-r-sm">Anonymous</a></div>
+                    <div class="text-xs block m-t-xs"><i class="fa fa-clock-o text-muted"></i> {{post.createdAt}}</div>
                 </div>
                 <div class="text-center col-lg-12 m-t-md">
                     <a href="" class="m-l-sm"><i class="fa fa-folder-open-o text-muted"></i> save</a>
-                    <a href="" class="m-l-sm"><i class="fa fa-thumbs-o-up text-muted"></i> 4 votes</a>
+                    <a href="" class="m-l-sm"><i class="fa fa-thumbs-o-up text-muted"></i> {{post.voteCount}} votes</a>
                 </div>
             </div>
         </div>
@@ -35,9 +37,7 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="tags m-b-sm">
-                                <span class="post-tag bg-info m-r-xs">tag1</span>
-                                <span class="post-tag bg-info m-r-xs">tag2</span>
-                                <span class="post-tag bg-info m-r-xs">tag3</span>
+                                <span class="post-tag bg-info m-r-xs" ng-repeat="tag in post.tags">{{tag}}</span>
                             </div>
                         </div>
                         <div class="col-lg-12">
@@ -54,44 +54,59 @@
             <div class="answers-header">
                 <span class="answer-count">{{post.replies.length}} answers</span>
                 <div class="answers-header-tabs">
-                    <a href="">
+                    <a ng-class="{'current': orderBy=='createdAt' && reverse==true}" ng-click="orderBy='createdAt'; reverse=true;">
                         newest</a>
-                    <a href="">
+                    <a ng-class="{'current': orderBy=='createdAt' && reverse==false}" ng-click="orderBy='createdAt'; reverse=false;">
                         oldest</a>
-                    <a class="current" href="">
+                    <a ng-class="{'current': orderBy!='createdAt'}"  ng-click="orderBy=['voteCount','createdAt']; reverse=false">
                         votes</a>
                 </div>
             </div>
         </div>
-        <div class="panel hbox hbox-auto-xs no-border" ng-repeat="answer in post.replies  | orderBy:'date':false">
+        <div class="panel hbox hbox-auto-xs no-border" ng-repeat="reply in post.replies  | orderBy:orderBy:reverse">
             <div class="wrapper-lg">
                 <div class="reply-header">
                     <a class="pull-left thumb-md thumb-wrapper m-r-md">
-                        <img src="img/b0.jpg">
+                        <img src="img/b0.jpg" ng-if="reply.anonymous!=true">
+                        <img src="img/a2.jpg" ng-if="reply.anonymous">
                     </a>
                     <div class="reply-header-content">
-                        <a href="" class="text-md">John smith</a>
-                        <span class="text-muted text-sm block m-t-xs">
-                            <a href="" class="m-r-sm"><i class="fa fa-thumbs-o-up text-muted"></i> 4 votes </a>
-                            <a ng-click="toggleReply[answer._id] = !toggleReply[answer._id]"><i class="fa fa-comment-o text-muted"></i> add a comment</a>
+                        <a href="" class="text-md" ng-if="reply.anonymous!=true">{{reply.createdBy.firstName}} {{reply.createdBy.lastName}}</a>
+                        <a href="" class="text-md" ng-if="reply.anonymous">Anonymous</a>
+                        <span class="text-sm block m-t-xs">
+                            <span class="m-r-sm text-muted"><i class="fa fa-thumbs-o-up"></i> {{reply.voteCount}} votes </span>
+                            <span class="m-r-sm text-muted"><i class="fa fa-clock-o"></i> {{reply.createdAt}} </span>
 
 
                         </span>
                     </div>
                 </div>
-                <div class="reply-content">
-                    <p ng-bind-html="trustAsHtml(answer.answer)"></p>
+                <div class="reply-content m-b-lg">
+                    <p ng-bind-html="trustAsHtml(reply.content)"></p>
                 </div>
-                <div uib-collapse="toggleReply[answer._id]" class="reply-textarea">
-                    <form class="ng-pristine ng-valid" ng-submit="answerQuestion(answer._id)">
+                <div class="reply-content" class="b-t">
+                    <div class="line b-b b-light"></div>
+                </div>
+
+                <div class="reply-content" class="b-t">
+                    <span ng-bind-html="trustAsHtml(reply.content)"></span>
+                    <p class="pull-right"> -<a href="" class="text-sm m-l-xs">Anonymous</a> <span class="m-r-sm text-muted m-l-xxs">{{reply.createdAt}} </span></p>
+                    <div class="line b-b b-light"></div>
+                </div>
+                <div class="reply-content">
+                    <a ng-click="toggleReply[reply._id] = !toggleReply[reply._id]" class="m-r-sm text-muted"><i class="fa fa-comment-o"></i> add a comment</a>
+                </div>
+
+                <div uib-collapse="toggleReply[reply._id]" class="reply-textarea">
+                    <form class="ng-pristine ng-valid" ng-submit="reply(reply._id)">
                         <div class="form-group">
-                            <div crm-editor id="{{answer._id}}"></div>
+                            <div crm-editor id="{{reply._id}}"></div>
                         </div>
                         <div class="form-group">
                             <div class="pull-left">
                                 <div class="checkbox m-r-md">
                                     <label class="i-checks">
-                                        <input type="checkbox" checked=""><i></i> Post as anonymous
+                                        <input type="checkbox" ng-model="anonymousMap[reply._id]"><i></i> Post as anonymous
                                     </label>
                                 </div>
 
@@ -113,15 +128,15 @@
     <div class="panel hbox hbox-auto-xs b-a" id="post-reply">
         <div class="wrapper-lg">
             <h4 class="m-b">Your Reply</h4>
-            <form class="ng-pristine ng-valid" ng-submit="answerQuestion('editor1')">
+            <form class="ng-pristine ng-valid" ng-submit="reply(post._id)">
                 <div class="form-group">
-                    <div crm-editor id="editor1"></div>
+                    <div crm-editor id="{{post._id}}"></div>
                 </div>
                 <div class="form-group">
                     <div class="pull-left">
                         <div class="checkbox m-r-md">
                             <label class="i-checks">
-                                <input type="checkbox" checked=""><i></i> Post as anonymous
+                                <input type="checkbox" ng-model="anonymousMap[post._id]"><i></i> Post as anonymous
                             </label>
                         </div>
 

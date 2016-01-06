@@ -48,19 +48,23 @@
             <div class="panel wrapper cr-l-panel b-b">
                 <div class="wrapper-md">
                     <h4 class="m-b">New Post<a class="pull-right" ng-click="isNewPostCollapsed = !isNewPostCollapsed"><i class="fa fa-caret-square-o-up text-muted"></i></a></h4>
-                    <form class="ng-pristine ng-valid b-t" ng-submit="answerQuestion('editor1')">
+                    <form class="ng-pristine ng-valid b-t" ng-submit="addNewPost()">
+                        <div class="form-group m-t">
+                            <label>Title</label>
+                            <input type="text" class="form-control" placeholder="Title" ng-model="newPost.title">
+                        </div>
                         <div class="form-group m-t">
                             <label>Tags <span class="text-muted">press enter to add tags</span></label>
-                            <div bootstrap-tagsinput></div>
+                            <div bootstrap-tagsinput ng-model="newPost.tags"></div>
                         </div>
                         <div class="form-group">
-                            <div crm-editor id="classroom._id"></div>
+                            <div crm-editor id="{{classroom._id}}"></div>
                         </div>
                         <div class="form-group">
                             <div class="pull-left">
                                 <div class="checkbox m-r-md">
                                     <label class="i-checks">
-                                        <input type="checkbox"><i></i> Post as anonymous
+                                        <input type="checkbox" ng-model="newPost.anonymous"><i></i> Post as anonymous
                                     </label>
                                 </div>
 
@@ -85,22 +89,22 @@
                     <th></th>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="question in classroom.questions">
+                    <tr ng-repeat="post in posts">
                         <td width="10%" align="center">
-                            <div>{{ question.vote }}</div><div>votes</div>
+                            <div>{{ post.voteCount }}</div><div>votes</div>
                         </td>
                         <td width="10%" align="center">
-                            <div>{{ question.answers==null?0:question.answers.length }}</div><div>answers</div>
+                            <div>{{ post.replyCount }}</div><div>answers</div>
                         </td>
                         <td>
                             <h4 class="question-hyperlink">
-                                <a ui-sref="app.question({questionId: question._id })">{{ question.title }}</a>
+                                <a ui-sref="app.classroomPost({classroomSlug: post.forumSlug, uid: post.uid, slug: post.slug })">{{ post.title }}</a>
                             </h4>
                             <div class="tags">
-                                <span class="post-tag bg-info m-r-xs" ng-repeat="tag in question.tags">{{tag}}</span>
+                                <span class="post-tag bg-info m-r-xs" ng-repeat="tag in post.tags">{{tag}}</span>
                             </div>
                             <div class="pull-right">
-                                <p>asked 10 mins ago by Karen Li</p>
+                                <p>asked {{getPostedTime(post.createdAt)}} by {{post.createdBy.firstName}} {{post.createdBy.lastName}}</p>
                             </div>
                         </td>
                     </tr>
