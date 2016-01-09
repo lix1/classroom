@@ -2,6 +2,22 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema,
     path = require('path');
 
+var scheduleSchema = new Schema({
+    courseId: { type: String, trim: true, uppercase: true, required: true},
+    name: { type: String, trim: true, required: true },
+    semester: { type: String, enum: ['Spring', 'Summer', 'Fall', 'Winter'], required: true},
+    year: { type: Number, min: 2015, max: 2016, required: true },
+    building: { type: String, trim: true },
+    day: [ { type: String, trim: true }],
+    endTime: { type: String, trim: true },
+    professor: { type: String, trim: true },
+    room: { type: String, trim: true },
+    startTime: { type: String, trim: true }
+},{
+    toObject: { virtuals: true },
+    toJSON: { virtuals: true }
+});
+
 var schema = new Schema({
     email:        {type: String, lowercase: true, trim: true,
         validate: {
@@ -18,23 +34,17 @@ var schema = new Schema({
     minor:          [ { type: String, trim: true }],
     _university:      { type: Schema.Types.ObjectId, ref: 'University' },
     vatus:          { type: String },
-    schedule:   [{
-        courseId: { type: String, trim: true, uppercase: true, required: true},
-        name: { type: String, trim: true, required: true },
-        semester: { type: String, enum: ['Spring', 'Summer', 'Fall', 'Winter'], required: true},
-        year: { type: Number, min: 2015, max: 2016, required: true },
-        building: { type: String, trim: true },
-        day: [ { type: String, trim: true }],
-        endTime: { type: String, trim: true },
-        professor: { type: String, trim: true },
-        room: { type: String, trim: true },
-        startTime: { type: String, trim: true }
-    }],
+    schedule:       [ scheduleSchema ],
     updatedAt:     { type: Date, default: Date.now }
 });
 
+
 schema.pre('update', function() {
     this.update({},{ $set: { updatedAt: new Date() } });
+});
+
+scheduleSchema.virtual('slug').get(function() {
+     return this.semester.toLowerCase() + '-' + this.year + '-' + this.courseId.toLowerCase();
 });
 
 // set up a mongoose model and pass it using module.exports

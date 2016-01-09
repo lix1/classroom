@@ -9,7 +9,7 @@ module.exports = {
   findBySlug: function(req, res) {
     async.waterfall([
       function(callback) {
-        PostModel.findOne({'forumRef' : { $regex : new RegExp('^'+req.params.forumRef+'$', "i") }, 'forumSlug' : { $regex : new RegExp('^'+req.params.forumSlug+'$', "i") }, 'slug' : { $regex : new RegExp('^'+req.params.slug+'$', "i") }, 'uid' : req.params.uid})
+        PostModel.findOne({'forumRef' : { $regex : new RegExp('^'+req.params.forumRef+'$', "i") }, 'forumSlug' : { $regex : new RegExp('^'+req.params.forumSlug+'$', "i") }, 'slug' : { $regex : new RegExp('^'+req.params.slug+'$', "i") }, 'uid' : req.params.uid, _university:decoded.university})
             .populate('createdBy', '_id firstName lastName')
             .exec(function (err, post) {
               if (err) {
@@ -17,6 +17,7 @@ module.exports = {
               } else if(!post) {
                 return callback(new Error("Post not found"), 404);
               } else {
+                post.update({ $inc: { viewCount: 1 }}).exec();
                 callback(null, post.toJSON());
               }
             });
@@ -47,25 +48,34 @@ module.exports = {
     });
   },
   findByForum: function(req, res) {
-    var model = require('../models')[req.params.forumRef];
-    model.findOne({slug: req.params.forumSlug}, function (err, forum) {
-      if (err) {
-        res.status(500).json({ error: 'Failed to query ' + req.params.forumRef });
-      } else if(!forum) {
-        res.status(500).json({ error: req.params.forumRef + ' not found'});
+    var decoded = auth.decodeToken(req,function(decoded) {
+      var modelName = req.params.forumRef;
+      var modelFormatted = modelName.toLowerCase().replace(/^(.)/, function($1) { return $1.toLowerCase(); });
+
+      var model = require('../models')[modelFormatted];
+      if(model){
+        model.findOne({slug: req.params.forumSlug,_university:decoded.university}, function (err, forum) {
+          if (err) {
+            res.status(500).json({ error: 'Failed to query ' + req.params.forumRef });
+          } else if(!forum) {
+            res.status(500).json({ error: req.params.forumRef + ' not found'});
+          } else {
+            PostModel.find({'forumRef' : req.params.forumRef, 'forumSlug' : { $regex : new RegExp('^'+req.params.forumSlug+'$', "i") }})
+                .populate('createdBy', 'email firstName lastName')
+                .sort( [['_id', -1]] )
+                .exec(function (err, doc) {
+                  if (err) {
+                    res.status(500).json({ error: 'Failed to query posts: ' + err });
+                  } else if(!doc) {
+                    res.status(404).json({ error: 'No posts found'});
+                  } else {
+                    res.status(200).json(doc);
+                  }
+                });
+          }
+        });
       } else {
-        PostModel.find({'forumRef' : req.params.forumRef, 'forumSlug' : { $regex : new RegExp('^'+req.params.forumSlug+'$', "i") }})
-            .populate('createdBy', 'email firstName lastName')
-            .sort( [['_id', -1]] )
-            .exec(function (err, doc) {
-              if (err) {
-                res.status(500).json({ error: 'Failed to query posts: ' + err });
-              } else if(!doc) {
-                res.status(404).json({ error: 'No posts found'});
-              } else {
-                res.status(200).json(doc);
-              }
-            });
+        res.status(500).json({ error: 'Invalid model ' + modelName });
       }
     });
   },
@@ -85,6 +95,7 @@ module.exports = {
               tags:  req.body.tags,
               forumSlug:  forum.slug,
               forumRef:  req.body.forumRef,
+              _university: decoded.university,
               anonymous:  req.body.anonymous,
               createdBy:  decoded.id,
               updatedBy:  decoded.id

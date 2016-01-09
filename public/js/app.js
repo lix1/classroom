@@ -95,9 +95,17 @@ var app = angular.module('app', [
                 }
             })
             .state('app.calendar', {
-                url: '/calendar/:classroomId',
+                url: '/calendar',
                 controller: 'CalendarCtrl',
-                templateUrl:'tpl/console/calendar.html'
+                templateUrl:'tpl/console/calendar.html',
+                resolve: {
+                    deps: ['uiLoad',
+                        function( uiLoad ){
+                            return uiLoad.load( [
+                                'js/directives/DatetimepickerDirective.js'
+                            ]);
+                        }]
+                }
 
             })
             .state('app.classroomPost', {

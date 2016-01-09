@@ -2,9 +2,6 @@ var home = require('../app/controllers/home'),
     auth = require('../app/controllers/authentication'),
     user = require('../app/controllers/user'),
     profile = require('../app/controllers/userProfile'),
-    course = require('../app/controllers/course'),
-    question = require('../app/controllers/question'),
-    answer = require('../app/controllers/answer'),
     post = require('../app/controllers/post'),
     comment = require('../app/controllers/comment'),
     classroom = require('../app/controllers/classroom'),
@@ -17,13 +14,6 @@ module.exports.initialize = function(app, router) {
     router.post('/auth/login', auth.login);
     router.post('/auth/signup', auth.signup);
     router.get('/api/users' ,user.getAll);
-    router.get('/api/course' ,course.search);
-    router.get('/api/courses' ,course.getAll);
-    router.post('/api/course' ,course.create);
-    router.post('/api/question' ,question.create);
-    router.get('/api/question/:id' ,question.find);
-    router.post('/api/answer' ,answer.create);
-    router.get('/api/answer' ,answer.getByQuestion);
 
     router.get('/api/university/:id' ,university.findById);
     router.post('/admin/university' ,university.create);
@@ -36,11 +26,16 @@ module.exports.initialize = function(app, router) {
     router.get('/api/classroom/:year/:semester/:courseId' ,classroom.findByCourse);
     router.get('/api/classroom/:slug' ,classroom.findBySlug);
     router.put('/api/classroom' ,classroom.update);
+    router.get('/api/classroom/schedule/:slug' ,classroom.getEventsByClassroom);
+    router.put('/api/classroom/schedule' ,classroom.updateEventInSchedule);
+    router.post('/api/classroom/schedule' ,classroom.addEventToSchedule);
+    router.delete('/api/classroom/schedule/:classroomId/:scheduleId' ,classroom.deleteCourseById);
 
     router.get('/api/post/:forumRef/:forumSlug/:uid/:slug', post.findBySlug);
     router.get('/api/post/:forumRef/:forumSlug', post.findByForum);
     router.post('/api/post', post.create);
     router.post('/api/comment', comment.create);
+    router.get('/api/comment/:postId', comment.findByPost);
 
     app.get('/classroom', function(req, res){
         res.render('index.jade');

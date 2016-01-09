@@ -14,6 +14,7 @@ var schema = new Schema({
     voteCount:     { type: Number, default: 0 },
     viewCount:     { type: Number, default: 0 },
     replyCount:     { type: Number, default: 0 },
+    _university: { type: Schema.Types.ObjectId, ref: 'University' },
     createdBy: { type: Schema.Types.ObjectId, ref: 'UserProfile' },
     updatedBy: { type: Schema.Types.ObjectId, ref: 'UserProfile' },
     updatedAt: { type: Date, default: Date.now }

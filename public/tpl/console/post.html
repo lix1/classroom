@@ -21,7 +21,7 @@
                     <div class="text-xs block m-t-xs"><i class="fa fa-clock-o text-muted"></i> {{post.createdAt}}</div>
                 </div>
                 <div class="text-center col-lg-12 m-t-md">
-                    <a href="" class="m-l-sm"><i class="fa fa-folder-open-o text-muted"></i> save</a>
+                    <a href="" class="m-l-sm" ng-show="false"><i class="fa fa-folder-open-o text-muted"></i> save</a>
                     <a href="" class="m-l-sm"><i class="fa fa-thumbs-o-up text-muted"></i> {{post.voteCount}} votes</a>
                 </div>
             </div>
@@ -63,7 +63,7 @@
                 </div>
             </div>
         </div>
-        <div class="panel hbox hbox-auto-xs no-border" ng-repeat="reply in post.replies  | orderBy:orderBy:reverse">
+        <div class="panel hbox hbox-auto-xs no-border" ng-repeat="reply in post.replies | orderBy:orderBy:reverse">
             <div class="wrapper-lg">
                 <div class="reply-header">
                     <a class="pull-left thumb-md thumb-wrapper m-r-md">
@@ -74,7 +74,7 @@
                         <a href="" class="text-md" ng-if="reply.anonymous!=true">{{reply.createdBy.firstName}} {{reply.createdBy.lastName}}</a>
                         <a href="" class="text-md" ng-if="reply.anonymous">Anonymous</a>
                         <span class="text-sm block m-t-xs">
-                            <span class="m-r-sm text-muted"><i class="fa fa-thumbs-o-up"></i> {{reply.voteCount}} votes </span>
+                            <a class="m-r-sm text-muted"><i class="fa fa-thumbs-o-up"></i> {{reply.voteCount}} votes </a>
                             <span class="m-r-sm text-muted"><i class="fa fa-clock-o"></i> {{reply.createdAt}} </span>
 
 
@@ -88,9 +88,9 @@
                     <div class="line b-b b-light"></div>
                 </div>
 
-                <div class="reply-content" class="b-t">
-                    <span ng-bind-html="trustAsHtml(reply.content)"></span>
-                    <p class="pull-right"> -<a href="" class="text-sm m-l-xs">Anonymous</a> <span class="m-r-sm text-muted m-l-xxs">{{reply.createdAt}} </span></p>
+                <div class="reply-content subcomment" class="b-t" ng-repeat="subcomment in reply.replies | orderBy:'createdAt':false">
+                    <span ng-bind-html="trustAsHtml(subcomment.content)"></span>
+                    <p class="pull-right"> -<a href="" class="text-sm m-l-xs" ng-if="subcomment.anonymous">Anonymous</a><a href="" class="text-sm m-l-xs" ng-if="subcomment.anonymous!=true">{{subcomment.createdBy.firstName}} {{subcomment.createdBy.lastName}}</a> <span class="m-r-sm text-muted m-l-xxs">{{subcomment.createdAt}} </span></p>
                     <div class="line b-b b-light"></div>
                 </div>
                 <div class="reply-content">
@@ -98,7 +98,7 @@
                 </div>
 
                 <div uib-collapse="toggleReply[reply._id]" class="reply-textarea">
-                    <form class="ng-pristine ng-valid" ng-submit="reply(reply._id)">
+                    <form class="ng-pristine ng-valid" ng-submit="replyTo(reply._id)">
                         <div class="form-group">
                             <div crm-editor id="{{reply._id}}"></div>
                         </div>
@@ -128,7 +128,7 @@
     <div class="panel hbox hbox-auto-xs b-a" id="post-reply">
         <div class="wrapper-lg">
             <h4 class="m-b">Your Reply</h4>
-            <form class="ng-pristine ng-valid" ng-submit="reply(post._id)">
+            <form class="ng-pristine ng-valid" ng-submit="replyTo(post._id)">
                 <div class="form-group">
                     <div crm-editor id="{{post._id}}"></div>
                 </div>

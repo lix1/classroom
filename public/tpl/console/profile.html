@@ -28,8 +28,8 @@
                 <div class="col-xs-4" ng-repeat="course in profile.schedule">
                     <div class="panel padder-v item b-a crm-box-wrapper">
                         <div class="crm-box-content">
-                            <div><span><a class="h1 crm-number" ui-sref="app.classroom({year: course.year, semester: course.semester, courseId: course.courseId})">{{course.courseId}}</a></span></div>
-                            <div><span><a class="text-muted text-md crm-name" ui-sref="app.classroom({year: course.year, semester: course.semester, courseId: course.courseId})">{{course.name}}</a></span></div>
+                            <div><span><a class="h1 crm-number" ui-sref="app.classroom({slug: course.slug})">{{course.courseId}}</a></span></div>
+                            <div><span><a class="text-muted text-md crm-name" ui-sref="app.classroom({slug: course.slug})">{{course.name}}</a></span></div>
                             <div><span class="text-muted text-md">{{course.professor}}</span></div>
                             <div><span class="text-muted text-md">{{getDayStr(course.day)}}</span></div>
                             <div><span class="text-muted text-md">{{course.startTime}} - {{course.endTime}}</span></div>

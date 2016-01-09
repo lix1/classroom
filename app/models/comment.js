@@ -5,6 +5,7 @@ var mongoose = require('mongoose'),
 var schema = new Schema({
     _post: { type: Schema.Types.ObjectId, ref: 'Post' },
     _parent: { type: Schema.Types.ObjectId, ref: 'Comment' },
+    _university: { type: Schema.Types.ObjectId, ref: 'University' },
     content:   { type: String, trim: true, required: true },
     voteCount:     { type: Number, default: 0 },
     createdBy: { type: Schema.Types.ObjectId, ref: 'UserProfile' },

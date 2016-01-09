@@ -1,0 +1,64 @@
+<div class="modal-header">
+  <h3 class="modal-title">{{modalTitle}}
+  </h3>
+</div>
+<div class="modal-body wrapper-lg">
+  <div class="row">
+    <div class="col-sm-12">
+      <form name="form" class="form-horizontal form-validation">
+        <fieldset>
+          <div class="form-group">
+            <label class="col-md-3 control-label text-right">Title</label>
+            <div class="col-md-7">
+              <input type="text" class="form-control" required ng-model="event.title">
+              <span class="help-block">*required</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-3 control-label text-right">Event type</label>
+            <div class="col-md-7">
+              <label class="checkbox-inline i-checks">
+                <input type="radio" ng-model="event.type" value="Assignment"><i></i> Assignment
+              </label>
+              <label class="checkbox-inline i-checks">
+                <input type="radio" ng-model="event.type" value="Project"><i></i> Project
+              </label>
+              <label class="checkbox-inline i-checks">
+                <input type="radio" ng-model="event.type" value="Quiz"><i></i> Quiz
+              </label>
+              <label class="checkbox-inline i-checks">
+                <input type="radio" ng-model="event.type" value="Exam"><i></i> Exam
+              </label>
+              <label class="checkbox-inline i-checks">
+                <input type="radio" ng-model="event.type" value="Other"><i></i> Other
+              </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-3 control-label text-right">Notes</label>
+            <div class="col-md-7">
+              <textarea type="text" class="form-control" ng-model="event.notes"></textarea>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-3 control-label text-right">Starts</label>
+            <div class="col-md-7">
+              <div datetimepicker ng-model="event.startTime"></div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-3 control-label text-right">Ends</label>
+            <div class="col-md-7">
+              <div datetimepicker ng-model="event.endTime"></div>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+      <div class="modal-footer">
+        <button class="btn btn-info" type="submit" ng-click="submit()" ng-disabled="isSubmitting||form.$invalid">Submit</button>
+        <button class="btn btn-default" ng-click="cancel()" ng-disabled="isSubmitting">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+</div>

@@ -322,3 +322,7 @@ input[type="search"] {
 .form-control:focus {
   border-color: #55ACEE;
 }
+.subcomment p {
+  margin: 0 0 0px;
+  display: inline-block;
+}

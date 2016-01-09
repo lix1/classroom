@@ -9,6 +9,8 @@ app.controller('PostCtrl', ['$state','$stateParams', '$scope', '$http','$uibModa
         $http.get("/api/post/Classroom/"+$stateParams.classroomSlug+"/"+$stateParams.uid+"/"+$stateParams.slug)
             .success(function (data) {
                 $scope.post=data;
+                processCommentData(data.replies);
+                console.log($scope.post)
                 $scope.anonymousMap[$scope.post._id] = false;
                 $scope.post.replies.forEach(function(e) {
                     $scope.toggleReply[e._id] = true;
@@ -38,29 +40,50 @@ app.controller('PostCtrl', ['$state','$stateParams', '$scope', '$http','$uibModa
     $scope.anonymousChanged = function(id){
         $scope.anonymousMap[id]=!$scope.anonymousMap[id];
     };
+    $scope.hello = function(id){
+        console.log(id)
+    };
 
-    $scope.reply = function(id) {
+    var loadComment = function(){
+        $http.get("/api/comment/"+$scope.post._id)
+            .success(function (data) {
+                processCommentData(data);
+            }).error(function(data, status, headers, config) {
+
+            });
+    }
+    var processCommentData = function(data){
+        var parents = {};
+        var children = [];
+        data.forEach(function(e) {
+            if(e.hasOwnProperty("_parent")&& e._parent!=null){
+                children.push(e);
+            } else {
+                e.replies=[];
+                parents[e._id]=e;
+            }
+        });
+        children.forEach(function(e) {
+            parents[e._parent].replies.push(e);
+        });
+        $scope.post.replies=[];
+        for (var key in parents) {
+            $scope.post.replies.push(parents[key]);
+        }
+    }
+
+    $scope.replyTo = function(id) {
         var req={};
-        req.postId=id;
+        req.postId=$scope.post._id;
         if(id!=$scope.post._id){
-            req.parentId=$scope.post._id;
+            req.parentId=id;
         }
         req.content = CRMEditor.getValue(id);
         req.anonymous=$scope.anonymousMap[id];
         console.log(req)
         $http.post('/api/comment',req).
             success(function(data, status, headers, config) {
-                console.log(data);
-                CRMEditor.clear(id);
-                if(data._parent==null){
-                    $scope.post.replies.splice(0,0,data);
-                } else {
-                    $scope.post.replies.forEach(function(e) {
-                        if(e._id==data._parent){
-                            e.replies.splice(0,0,data);
-                        }
-                    });
-                }
+                loadComment();
             }).
             error(function(data, status, headers, config) {
 

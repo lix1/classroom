@@ -143,28 +143,12 @@ angular.module('app.consoleHospitalCtrl', ['datatables'])
             }
         };
     }])
-        .controller('CalendarCtrl', ['$scope','$http','$stateParams', function($scope,$http,$stateParams) {
-
-        $http.get("/api/course?id="+$stateParams.classroomId)
-            .success(function (data) {
-                $scope.course=data;
-            }).error(function(data, status, headers, config) {
-                $scope.course={"_id":"563ee3ff2d686230d935e830","courseNumber":"CS446","department":"CS","description":"Machine Learning","title":"Machine Learning","questions":[{"_id":"563efdaaee8a06400bd4b41d","title":"Title","details":"Question","courseId":"563ee3ff2d686230d935e830","authorId":"563e904edb14c0253b811e2a","__v":0,"date":"2015-11-08T07:45:46.021Z"},{"_id":"563efe3fee8a06400bd4b41e","title":"Title","details":"Question","courseId":"563ee3ff2d686230d935e830","authorId":"563e904edb14c0253b811e2a","__v":0,"date":"2015-11-08T07:48:15.116Z"}]};
-            });
-
-
+        .controller('CalendarCtrl', ['$scope','$http','$stateParams','$uibModal', function($scope,$http,$stateParams,$uibModal) {
 
         var date = new Date();
         var d = date.getDate();
         var m = date.getMonth();
         var y = date.getFullYear();
-
-        /* event source that pulls from google.com */
-        $scope.eventSource = {
-            url: "http://www.google.com/calendar/feeds/usa__en%40holiday.calendar.google.com/public/basic",
-            className: 'gcal-event',           // an option!
-            currentTimezone: 'America/Chicago' // an option!
-        };
 
         /* event source that contains custom events on the scope */
         $scope.events = [
@@ -238,11 +222,27 @@ angular.module('app.consoleHospitalCtrl', ['datatables'])
 
         /* add custom event*/
         $scope.addEvent = function() {
-            $scope.events.push({
-                title: 'New Event',
-                start: new Date(y, m, d),
-                className: ['b-l b-2x b-info']
+            var modalInstance = $uibModal.open({
+                templateUrl: 'tpl/console/modal/ManageCalendarEventModal.html',
+                controller: 'ManageCalendarEventModalCtrl',
+                size: 'lg',
+                resolve: {
+                    items: function () {
+                        var items = {};
+                        return items;
+                    }
+                }
             });
+            modalInstance.result.then(function () {
+                init();
+            });
+
+
+            //$scope.events.push({
+            //    title: 'New Event',
+            //    start: new Date(y, m, d),
+            //    className: ['b-l b-2x b-info']
+            //});
         };
 
         /* remove event */
@@ -261,5 +261,24 @@ angular.module('app.consoleHospitalCtrl', ['datatables'])
 
         /* event sources array*/
         $scope.eventSources = [$scope.events];
-    }]);
+    }])
+    .controller('ManageCalendarEventModalCtrl', ['$scope','$uibModalInstance','items', function($scope,$uibModalInstance,items) {
+        $scope.event={};
+        $scope.event.type="Assignment";
+        if(items.event!=null){
+            $scope.modalTitle="Edit event " + items.event.title;
+            $scope.event.title=items.event.title;
+            $scope.event.note=items.event.note;
+        } else {
+            $scope.modalTitle="New event";
+        }
+        $scope.isSubmitting = false;
+        $scope.submit = function(){
+            console.log($scope.event)
+        }
+        $scope.cancel = function () {
+            $uibModalInstance.dismiss('cancel');
+        };
+
+    }])
 ;
