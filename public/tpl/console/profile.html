@@ -2,16 +2,20 @@
     <!-- main -->
     <div class="col">
         <!-- main header -->
-        <div class="bg-light lter b-b wrapper-lg">
-            <div class="pull-left m-r-lg post-img thumb thumb-wrapper">
-                <img src="img/b1.jpg" alt="...">
+        <div class="bg-light lter b-b wrapper-lg profile-thumbnail-header">
+            <div class="pull-left m-r-lg thumbnail-img thumb thumb-wrapper">
+                <img src="{{thumbnail}}" alt=""/>
             </div>
             <div class="clear">
+                <div class="pull-right">
+                    <button class="btn btn-sm btn-icon btn-default" ng-click="updateProfile()"><i class="fa fa-edit"></i></button>
+                    <button class="btn btn-sm btn-icon btn-default" ng-click="uploadImage()"><i class="fa fa-image"></i></button>
+                </div>
                 <div class="h2 m-t-xs m-b-xs">{{profile.firstName}} {{profile.lastName}}</div>
                 <h4>{{profile._university.name}}</h4>
                 <h5><i class="fa fa-envelope-o fa-fw text-muted m-r-xs"></i>{{profile.email}}</h5>
-                <div><small class="text-muted m-r-md">Major</small><span class="text-sm" ng-repeat="i in profile.major">{{i}}</span></div>
-                <div><small class="text-muted m-r-md">Minor</small><span class="text-sm" ng-repeat="i in profile.minor">{{i}}</span></div>
+                <div><small class="text-muted m-r-md" ng-show="profile.major.length>0">Major</small><span class="text-sm" ng-repeat="i in profile.major">{{i}}</span></div>
+                <div><small class="text-muted m-r-md" ng-show="profile.minor.length>0">Minor</small><span class="text-sm" ng-repeat="i in profile.minor">{{i}}</span></div>
             </div>
         </div>
 
@@ -47,11 +51,11 @@
 
 
 
-            <div class="profile-header m-t-md">
+            <div class="profile-header m-t-md" ng-if="false">
                 <span class="font-thin m-t-none m-b-md text-lg m-b-md">My Recent Posts</span>
             </div>
 
-            <div class="row m-t-md">
+            <div class="row m-t-md" ng-if="false">
                 <div class="col-lg-12">
                     <div class="table-responsive m-t-sm">
                         <table datatable="ng" class="table table-striped m-b-none">

@@ -1,6 +1,6 @@
 <ul class="breadcrumb bg-light lter b-b wrapper-md">
     <li><a ui-sref="app.home"><i class="fa fa-home"></i> Home </a></li>
-    <li><a ui-sref="app.classroom({classroomId: course._id })"><i class="fa fa-users"></i> {{course.courseNumber}} - {{course.title}}</a></li>
+    <li><a ui-sref="app.classroom({slug: classroom.slug })"><i class="fa fa-users"></i> {{classroom.courseId}}</a></li>
     <li class="active"><i class="fa fa-users"></i> Calendar</li>
 </ul>
  <div class="hbox hbox-auto-xs hbox-auto-sm">
@@ -13,26 +13,18 @@
                     <i class="fa fa-bars"></i> List
                 </button>
 
-                <div class="pull-right">
-                    <button type="button" class="btn btn-sm btn-default" ng-click="today()">today</button>
-                    <div class="btn-group m-l-xs">
-                        <button class="btn btn-sm btn-default" ng-click="changeView('agendaDay')">Day</button>
-                        <button class="btn btn-sm btn-default" ng-click="changeView('agendaWeek')">Week</button>
-                        <button class="btn btn-sm btn-default" ng-click="changeView('month')">Month</button>
-                    </div>
-                </div>
             </div>
             <div class="pos-rlt">
                 <div class="fc-overlay">
                     <div class="panel bg-white b-a pos-rlt">
                         <span class="arrow"></span>
-                        <div class="h4 font-thin m-b-sm">{{event.title}}</div>
+                        <div class="h4 font-thin m-b-sm">{{event.title}}
+                            <div class="pull-right"><a ng-click="editEvent(event)"><i class="fa fa-edit text-muted m-r-xs"></i></a><a ng-click="deleteEvent(event)"><i class="fa fa-trash-o text-muted m-r-xs"></i></a></div>
+                        </div>
                         <div class="line b-b b-light"></div>
-                        <div><i class="icon-calendar text-muted m-r-xs"></i> {{event.start | date:'medium'}}</div>
-                        <div class="ng-hide" ng-show='event.end'><i class="icon-clock text-muted m-r-xs"></i> {{event.end | date:'medium'}}</div>
-                        <div class="ng-hide" ng-show='event.location'><i class="icon-pointer text-muted m-r-xs"></i> {{event.location}}</div>
+                        <div class="ng-hide" ng-show='event.start'><i class="icon-clock text-muted m-r-xs"></i><span class="text-muted">starts</span> {{eventTimeFormat(event.start)}}</div>
+                        <div class="ng-hide" ng-show='event.end'><i class="icon-clock text-muted m-r-xs"></i><span class="text-muted">ends</span> {{eventTimeFormat(event.end)}}</div>
                         <div class="m-t-sm">{{event.info}}</div>
-                        <div class="m-t-sm">{{event.url}}</div>
                     </div>
                 </div>
                 <div class="calendar" ng-model="eventSources" config="uiConfig.calendar" ui-calendar="uiConfig.calendar"></div>

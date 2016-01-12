@@ -35,6 +35,7 @@ var schema = new Schema({
     _university:      { type: Schema.Types.ObjectId, ref: 'University' },
     vatus:          { type: String },
     schedule:       [ scheduleSchema ],
+    _classrooms:     [{ type: Schema.Types.ObjectId, ref: 'Classroom' }],
     updatedAt:     { type: Date, default: Date.now }
 });
 
@@ -44,7 +45,7 @@ schema.pre('update', function() {
 });
 
 scheduleSchema.virtual('slug').get(function() {
-     return this.semester.toLowerCase() + '-' + this.year + '-' + this.courseId.toLowerCase();
+     return this.semester + '-' + this.year + '-' + this.courseId;
 });
 
 // set up a mongoose model and pass it using module.exports

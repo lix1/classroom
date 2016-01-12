@@ -20,7 +20,7 @@ module.exports = function(app) {
   app.use(bodyParser.urlencoded({
     extended: true
   }));
-  app.use(bodyParser.json());
+  app.use(bodyParser.json({limit: '5mb'}));
   app.use(methodOverride());
   app.use(cookieParser('some-secret-value-here'));
 
@@ -31,6 +31,7 @@ module.exports = function(app) {
   if ('development' === app.get('env')) {
     app.use(errorHandler());
   }
+
 
   return app;
 };

@@ -9,7 +9,13 @@ app.controller('ProfileCtrl', ['$state','$stateParams', '$scope', '$http','$uibM
                 console.log(data)
                 $scope.profile=data;
             }).error(function(data, status, headers, config) {
-                $scope.profile={"_id":"lix1@umd.edu","firstName":"Karen","lastName":"Li","_university":{"_id":"5685d15964003731e5e53bd9","name":"University of Maryland, College Park","id":"5685d15964003731e5e53bd9"},"__v":0,"updatedTS":"2016-01-02T21:27:53.898Z","createdTS":"2016-01-02T21:27:53.897Z","schedule":[{"courseId":"CMSC122","name":"Introduction to Computer Programming via the Web","startTime":"10:00 am","endTime":"10:50 am","_id":"568840fb449f3dc30cb25e48","day":["Monday","Wednesday"],"year":2016,"semester":"Spring"},{"courseId":"CMSC131","name":"Object-Oriented Programming I","startTime":"01:00 pm","endTime":"02:15 pm","_id":"5688413b449f3dc30cb25e49","day":["Monday","Wednesday"],"year":2016,"semester":"Spring"}],"minor":[],"major":[]};
+                notify(data.message);
+            });
+        $http.get("/api/profile/thumbnail")
+            .success(function (data) {
+                $scope.thumbnail='data:image/png;base64,' + data;
+            }).error(function(data, status, headers, config) {
+                notify(data.message);
             });
 
     }
@@ -58,11 +64,41 @@ app.controller('ProfileCtrl', ['$state','$stateParams', '$scope', '$http','$uibM
             resolve: {
                 items: function () {
                     var items = {};
-                    items.url = '/api/profile/schedule/'+course._id,
+                    items.url = '/api/profile/schedule/'+course._id;
                     items.message = 'Remove course <span class="text-info-dk">' + course.name + '</span> from your schedule? This cannot be undone.';
                     return items;
                 }
             }
+        });
+        modalInstance.result.then(function (data) {
+            $scope.profile.schedule = data.schedule;
+
+        });
+    }
+
+    $scope.updateProfile = function(course) {
+        var modalInstance = $uibModal.open({
+            templateUrl: 'tpl/console/modal/UpdateProfileModal.html',
+            controller: 'UpdateProfileModalCtrl',
+            size: 'lg',
+            resolve: {
+                items: function () {
+                    var items = {};
+                    items.profile = $scope.profile;
+                    return items;
+                }
+            }
+        });
+        modalInstance.result.then(function (data) {
+            $scope.profile.schedule = data.schedule;
+
+        });
+    }
+    $scope.uploadImage = function(course) {
+        var modalInstance = $uibModal.open({
+            templateUrl: 'tpl/console/modal/UploadThumbnailModal.html',
+            controller: 'UploadThumbnailModalCtrl',
+            size: 'lg'
         });
         modalInstance.result.then(function (data) {
             $scope.profile.schedule = data.schedule;
@@ -96,6 +132,53 @@ app.controller('ProfileCtrl', ['$state','$stateParams', '$scope', '$http','$uibM
         return str;
     }
 }]);
+    app.controller('UploadThumbnailModalCtrl', ['$scope','$uibModalInstance','$http', function ($scope,$uibModalInstance,$http) {
+        $scope.myImage='';
+        $scope.croppedImage='';
+
+        $scope.fileChanged = function(evt){
+            var file=evt.currentTarget.files[0];
+            var reader = new FileReader();
+            reader.onload = function (evt) {
+                $scope.$apply(function($scope){
+                    $scope.myImage=evt.target.result;
+                });
+            };
+            reader.readAsDataURL(file);
+        }
+
+        $scope.upload = function(){
+            if($scope.croppedImage.length>0){
+                var req = {
+                    "data":$scope.croppedImage
+                };
+                $http.put("/api/profile/thumbnail",req)
+                    .success(function (data) {
+                        $uibModalInstance.close($scope.croppedImage);
+                        notify(data.message);
+                    }).error(function(data, status, headers, config) {
+                        notify(data.message);
+                    });
+            }
+        }
+    }]);
+    app.controller('UpdateProfileModalCtrl', ['$scope','$uibModalInstance','$http','items', function ($scope,$uibModalInstance,$http,items) {
+        $scope.profile = {
+            firstName:items.profile.firstName,
+            lastName:items.profile.lastName
+        }
+        $scope.submit = function(){
+            $http.put("/api/profile",$scope.profile)
+                .success(function (data) {
+                    $uibModalInstance.close(data);
+                    notify("Profile updated successfully");
+                }).error(function(data, status, headers, config) {
+                    notify(data.message);
+                });
+        }
+
+
+    }]);
     app.controller('ManageCourseModalCtrl', ['$scope','$uibModalInstance','$http','items', function ($scope,$uibModalInstance,$http,items) {
         $scope.req={};
         $scope.course={};

@@ -50,11 +50,11 @@ module.exports = {
   findByForum: function(req, res) {
     var decoded = auth.decodeToken(req,function(decoded) {
       var modelName = req.params.forumRef;
-      var modelFormatted = modelName.toLowerCase().replace(/^(.)/, function($1) { return $1.toLowerCase(); });
+      var modelFormatted = modelName.toLowerCase().replace(/^(.)/, function($1) { return $1.toUpperCase(); });
 
       var model = require('../models')[modelFormatted];
       if(model){
-        model.findOne({slug: req.params.forumSlug,_university:decoded.university}, function (err, forum) {
+        model.findOne({slug: { $regex : new RegExp('^'+req.params.forumSlug+'$', "i") },_university:decoded.university}, function (err, forum) {
           if (err) {
             res.status(500).json({ error: 'Failed to query ' + req.params.forumRef });
           } else if(!forum) {
@@ -75,7 +75,7 @@ module.exports = {
           }
         });
       } else {
-        res.status(500).json({ error: 'Invalid model ' + modelName });
+        res.status(500).json({ error: 'Invalid model ' + modelFormatted });
       }
     });
   },

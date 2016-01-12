@@ -1,0 +1,39 @@
+<div class="modal-header">
+  <h3 class="modal-title">Upload profile image
+  </h3>
+</div>
+<div class="modal-body">
+  <div class="wrapper-sm ng-scope">
+    <div class="m-b-md">
+      <button class="btn btn-info pull-right" ng-click="upload()">Upload thumbnail</button>
+      Select an image file
+      <input type="file" file-on-change="fileChanged"/>
+    </div>
+  <div class="hbox hbox-auto-xs">
+    <div class="col">
+      <div class="wrapper-sm b-a bg-white m-r-xs m-b-xs">
+        <div class="bg-light" style="height:400px">
+          <img-crop image="myImage" result-image="croppedImage" result-image-size="168" area-type="square" class="ng-isolate-scope"><canvas width="251" height="320" style="margin-top: -160px; margin-left: -125.906px; cursor: default;"></canvas></img-crop>
+        </div>
+      </div>
+    </div>
+    <div class="col w-md text-right">
+      <div class="inline bg-white wrapper-sm b-a">
+        <div class="bg-light">
+          <img ng-src="{{croppedImage}}" />
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
+
+<!--<div class="modal-body wrapper-lg">-->
+  <!--<div>Select an image file: <input type="file" file-on-change="fileChanged"/></div>-->
+  <!--<div class="img-crop">-->
+    <!--<img-crop image="myImage" result-image="myCroppedImage" area-type="square"></img-crop>-->
+  <!--</div>-->
+  <!--<div>Cropped Image:</div>-->
+  <!--<div><img ng-src="{{myCroppedImage}}" /></div>-->
+<!--</div>-->
+

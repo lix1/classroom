@@ -2,7 +2,7 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema,
     path = require('path');
 
-var scheduleSchema = new Schema({
+var eventSchema = new Schema({
     title: { type: String, trim: true, required: true },
     note: { type: String, trim: true },
     type: { type: String, enum: ['Assignment', 'Project', 'Quiz', 'Exam', 'Other'], default: 'Other'},
@@ -14,21 +14,21 @@ var scheduleSchema = new Schema({
     timestamps: true
 });
 
-scheduleSchema.pre('update', function() {
+eventSchema.pre('update', function() {
     this.update({},{ $set: { updatedAt: new Date() } });
 });
 
 
 var schema = new Schema({
-    courseId: { type: String, trim: true, uppercase: true, required: true },
     name: { type: String, trim: true, required: true },
-    semester: { type: String, enum: ['Spring', 'Summer', 'Fall', 'Winter'], required: true},
-    year: { type: Number, min: 2015, max: 2016, required: true },
+    description: { type: String, trim: true },
+    semester: { type: String, enum: ['Spring', 'Summer', 'Fall', 'Winter']},
+    year: { type: Number, min: 2015, max: 2016},
     slug:   { type: String, trim: true },
-    schedule:       [ scheduleSchema ],
+    calendar:       [ eventSchema ],
     _members:  [{type: Schema.Types.ObjectId, ref: 'UserProfile' }],
     _parent: { type: Schema.Types.ObjectId, ref: 'Classroom' },
-    _university: { type: Schema.Types.ObjectId, ref: 'University' },
+    _university: { type: Schema.Types.ObjectId, ref: 'University', required: true },
     createdBy: { type: Schema.Types.ObjectId, ref: 'UserProfile' },
     updatedBy: { type: Schema.Types.ObjectId, ref: 'UserProfile' },
 },{
@@ -38,7 +38,6 @@ var schema = new Schema({
 });
 
 function slugify(text) {
-
     return text.toString().toLowerCase()
         .replace(/\s+/g, '-')        // Replace spaces with -
         .replace(/[^\w\-]+/g, '')   // Remove all non-word chars
@@ -48,8 +47,9 @@ function slugify(text) {
 }
 
 schema.pre('save', function (next) {
-    this.slug = this.semester.toLowerCase() + '-' + this.year + '-' + this.courseId.toLowerCase();
-    if(this.parent!=null){
+    if(!this._parent){
+        this.slug = this.semester.toLowerCase() + '-' + this.year + '-' + this.name.toLowerCase();
+    } else {
         this.slug += '-' + slugify(this.name);
     }
     next();

@@ -43,7 +43,7 @@
 
   <!-- search form
   <form class="navbar-form  navbar-left shift" role="search"  ng-controller="topBarSearch" ng-submit="doTopBarSearch()">-->
-    <form class="navbar-form  navbar-left shift" role="search">
+    <form class="navbar-form  navbar-left shift" role="search"  ng-show="false">
     <div class="form-group">
       <div class="input-group">
         <input type="text" ng-model="searchQuery" style="width: 245px" class="form-control input-sm bg-light no-border rounded padder" placeholder="Search for classroom ">
@@ -56,28 +56,24 @@
 
   <!-- / search form -->
 
+
   <!-- nabar right -->
   <ul class="nav navbar-nav navbar-right">
-    <li class="hidden-xs">
-      <a ui-fullscreen></a>
-    </li>
-    <li class="dropdown">
-      <a href class="dropdown-toggle clear" data-toggle="dropdown">
+      <li class="hidden-xs">
+          <a ui-fullscreen></a>
+      </li>
+    <li uib-dropdown>
+      <a uib-dropdown-toggle class="clear">
               <span class="thumb-sm avatar pull-right m-t-n-sm m-b-n-sm m-l-sm">
                 <img src="img/b1.jpg" class="img-circle">
               </span>
         <span>{{profile.userName}}</span> <b class="caret"></b>
       </a>
       <!-- dropdown -->
-      <ul class="dropdown-menu animated fadeInRight w">
-        <li>
+      <ul uib-dropdown-menu class="animated fadeInRight w" role="menu" >
+        <li role="menuitem">
           <!-- a ui-sref="app.page.profile">Profile</a--->
-          <a href ng-click="showUserProfile()">Profile</a>
-        </li>
-        <li>
-          <a ui-sref="app.docs">
-            Help
-          </a>
+          <a ng-click="showUserProfile()">Logout</a>
         </li>
       </ul>
       <!-- / dropdown -->

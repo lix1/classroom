@@ -17,14 +17,15 @@ var app = angular.module('app', [
         'app.commonCtrl',
         'app.accessCtrl',
         'app.consoleHomeCtrl',
-    'app.consoleHospitalCtrl',
-        'app.consoleMainCtrl',
+    'app.classroomCtrl',
     'app.filters',
     'app.services',
     'app.directives',
     'app.controllers',
         'angular-jwt',
-        'ui.calendar'
+        'ui.calendar',
+        'cgNotify',
+        'ngImgCrop'
 ])
 .run(
     [          '$rootScope', '$state', '$stateParams',
@@ -62,8 +63,17 @@ var app = angular.module('app', [
             })
             .state('app.home', {
                 url:        '/home',
-                controller: 'HomeCtrl',
-                templateUrl:'tpl/console/home.html'
+                controller: 'ProfileCtrl',
+                templateUrl:'tpl/console/profile.html',
+                resolve: {
+                    deps: ['uiLoad',
+                        function( uiLoad ){
+                            return uiLoad.load( [
+                                'js/controllers/profile.js',
+                                'js/directives/TypeaheadDirective.js'
+                            ]);
+                        }]
+                }
             })
             .state('app.profile', {
                 url:        '/profile',
@@ -95,7 +105,7 @@ var app = angular.module('app', [
                 }
             })
             .state('app.calendar', {
-                url: '/calendar',
+                url: '/calendar/:slug',
                 controller: 'CalendarCtrl',
                 templateUrl:'tpl/console/calendar.html',
                 resolve: {

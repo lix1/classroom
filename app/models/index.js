@@ -4,5 +4,6 @@ module.exports = {
   'University': require('./university'),
   'Classroom': require('./classroom'),
   'Post': require('./post'),
-  'Comment': require('./comment')
+  'Comment': require('./comment'),
+  'thumbnail': require('./thumbnail')
 };

@@ -35,21 +35,21 @@
             </div>
           </div>
           <div class="form-group">
-            <label class="col-md-3 control-label text-right">Notes</label>
+            <label class="col-md-3 control-label text-right">Note</label>
             <div class="col-md-7">
-              <textarea type="text" class="form-control" ng-model="event.notes"></textarea>
+              <textarea type="text" class="form-control" ng-model="event.note"></textarea>
             </div>
           </div>
           <div class="form-group">
             <label class="col-md-3 control-label text-right">Starts</label>
             <div class="col-md-7">
-              <div datetimepicker ng-model="event.startTime"></div>
+              <input datetimepicker ng-model="startTime" type='text' class="form-control"/>
             </div>
           </div>
           <div class="form-group">
             <label class="col-md-3 control-label text-right">Ends</label>
             <div class="col-md-7">
-              <div datetimepicker ng-model="event.endTime"></div>
+              <input datetimepicker ng-model="endTime" type='text' class="form-control"/>
             </div>
           </div>
         </fieldset>
@@ -62,3 +62,4 @@
   </div>
 
 </div>
+
