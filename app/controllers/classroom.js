@@ -18,7 +18,7 @@ module.exports = {
               var decoded = auth.decodeToken(req,function(decoded) {
                   ClassroomModel.findOne({'slug' : { $regex : new RegExp('^'+slug+'$', "i")}, '_university':decoded.university })
                       .populate('_members', '_id firstName lastName')
-                      .populate('_parent', '_id slug')
+                      .populate('_parent', '_id slug name')
                       .exec(function (err, doc) {
                           if (err){
                               callback(new Error("Failed to query classroom for " + slug), 500);

@@ -91,8 +91,6 @@ angular.module('app.classroomCtrl', ['datatables'])
                 });
         }
         $scope.leave = function(){
-            var req={};
-            req.classroomId=$scope.classroom._id;
             $http.delete('/api/profile/join/'+$scope.classroom._id)
                 .success(function(data, status, headers, config) {
                     notify(data.message);

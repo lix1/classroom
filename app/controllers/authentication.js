@@ -11,28 +11,61 @@ var secret = 'lavender';
 module.exports = {
   login: function(req, res) {
     if(req.body.email && req.body.password) {
-      UserModel.findOne({email: req.body.email, password: req.body.password})
-          .populate('_userProfile', '_id firstName lastName _university')
-          .exec(function (err, user) {
-            if (err){
-              res.status(401).json({error: "Error occurred during authentication process"});
-            } else if (!user) {
-              res.status(401).json({error: "Authentication failed. Invalid user name or password"});
-            } else {
-              console.log(user)
-              var token = jwt.sign({id:user._userProfile._id, isVerified:user.isVerified, university:user._userProfile._university,
-                                    email:user.email, firstName:user._userProfile.firstName, lastName:user._userProfile.lastName}, secret, {
-                expiresInMinutes: 2880 // expires in 24 hours
-              });
-              // return the information including token as JSON
-              res.json({
-                success: true,
-                message: 'Authenticated!',
-                token: token
-              });
-            }
+      UserModel.getAuthenticated(req.body.email,req.body.password, function(err, user, reason){
+        if (err){
+          return res.status(401).json({error: "Invalid user name or password"});
+        }
+        if (user) {
+          var token = jwt.sign({id:user._userProfile._id, isVerified:user.isVerified, university:user._userProfile._university,
+            email:user.email, firstName:user._userProfile.firstName, lastName:user._userProfile.lastName}, secret, {
+            expiresInMinutes: 2880 // expires in 24 hours
+          });
+          res.json({
+            success: true,
+            message: 'Authenticated!',
+            token: token
+          });
+        } else {
+          var reasons = UserModel.failedLogin;
+          switch (reason) {
+            case reasons.NOT_FOUND:
+            case reasons.PASSWORD_INCORRECT:
+              // note: these cases are usually treated the same - don't tell
+              // the user *why* the login failed, only that it did
+              res.status(401).json({error: "Invalid user name or password"});
+              break;
+            case reasons.MAX_ATTEMPTS:
+              // send email or otherwise notify user that account is
+              // temporarily locked
+              res.status(401).json({error: "You exceeded the maximum allowed number of login attempts. Account is temporarily locked. Please try again in 15 minutes."});
+              break;
+          }
+        }
 
-          })
+
+      })
+      //UserModel.findOne({email: req.body.email, password: req.body.password})
+      //    .populate('_userProfile', '_id firstName lastName _university')
+      //    .exec(function (err, user) {
+      //      if (err){
+      //        res.status(401).json({error: "Error occurred during authentication process"});
+      //      } else if (!user) {
+      //        res.status(401).json({error: "Authentication failed. Invalid user name or password"});
+      //      } else {
+      //        console.log(user)
+      //        var token = jwt.sign({id:user._userProfile._id, isVerified:user.isVerified, university:user._userProfile._university,
+      //                              email:user.email, firstName:user._userProfile.firstName, lastName:user._userProfile.lastName}, secret, {
+      //          expiresInMinutes: 2880 // expires in 24 hours
+      //        });
+      //        // return the information including token as JSON
+      //        res.json({
+      //          success: true,
+      //          message: 'Authenticated!',
+      //          token: token
+      //        });
+      //      }
+      //
+      //    })
     } else {
       res.status(400).json({ error: 'Invalid request' });
     }
@@ -68,6 +101,9 @@ module.exports = {
             password:   req.body.password
           });
           newUser.save(function(err, user) {
+            console.log(err)
+            console.log(user)
+
             if (err) {
               return callback(new Error("Error occurred during registration"), 500);
             }
@@ -115,7 +151,7 @@ module.exports = {
         }
       ], function (err, result) {
         if(err){
-          res.status(result).json({error: err});
+          return res.status(result).json({error: err});
         }
         res.status(201).json({
           success: true,
@@ -124,54 +160,6 @@ module.exports = {
         });
 
       });
-    }
-  },
-  signup1: function(req, res) {
-    if(req.body.email && req.body.password && req.body.firstName && req.body.lastName ) {
-      // get school_id from email
-      var emailRegex = /^[a-zA-Z0-9_.-]+@([a-zA-Z0-9-]+\.edu)$/g;
-      var matches = emailRegex.exec(req.body.email);
-      if(matches==null||matches.length==0){
-        res.status(400).json({error: "Invalid university email address: " + req.body.email});
-      } else {
-        var domain = matches[1];
-        UniversityModel.findOne({domain: domain}, function (err, university) {
-          if (err) {
-            res.status(500).json({error: "Failed to query university for " + domain});
-          } else if(!university) {
-            res.status(404).json({error: "University with domain "+domain+" not found"});
-          } else {
-            // todo remove this later
-            UserModel.find({email:req.body.email}).remove().exec();
-            UserProfileModel.find({_id:req.body.email}).remove().exec();
-
-            var newUser = new UserModel({
-              email:        req.body.email,
-              password:   req.body.password
-            });
-            newUser.save(function(err, user) {
-              if (err) {
-                res.status(500).json({error: "Error occurred during registration: " + err.message});
-              }
-              res.status(201).json("Successfully registered " + req.body.email);
-            });
-            var prof = new UserProfileModel({
-              email:        req.body.email,
-              firstName:  req.body.firstName,
-              lastName:   req.body.lastName,
-              major:      [],
-              minor:      [],
-              _university:   university._id
-            });
-            prof.save(function (err, profile) {
-              if (err) console.log('Failed to save user profile', err);
-              console.log('Saved user profile ', profile);
-            });
-          }
-        });
-      }
-    } else {
-      res.json(400, { error: 'Invalid request' });
     }
   },
   verifyToken: function(req, res, next) {

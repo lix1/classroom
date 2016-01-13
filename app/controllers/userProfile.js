@@ -9,20 +9,56 @@ var async = require('async');
 
 module.exports = {
     getById: function(req, res) {
-        var decoded = auth.decodeToken(req,function(decoded){
-            UserProfileModel
-                .findOne({_id: decoded.id})
-                .populate('_university', '_id name')
-                .populate('_classrooms', '_id name slug _parent _parent.name')
-                .exec(function (err, user) {
-                    if (err) {
-                        res.json(500, { error: 'Failed to find user profile'});
-                    }
-                    res.status(200).json(user.toJSON());
+        async.waterfall([
+            function(callback) {
+                auth.decodeToken(req,function(decoded){
+                    UserProfileModel
+                        .findOne({_id: decoded.id})
+                        .populate('_university', '_id name')
+                        .populate('_classrooms', '_id name slug _parent')
+                        .populate('_classrooms._parent')
+                        .exec(function (err, user) {
+                            if (err) {
+                                callback(new Error('Failed to find user profile'), 500);
+                            } else if(!user){
+                                callback(new Error('User profile not found'), 404);
+                            } else {
+                                callback(null, user.toJSON());
+                            }
+                        });
+                }, function(err){
+                    callback(new Error('Invalid token'), 401);
                 });
-        }, function(err){
-            res.json(401, { error: 'Invalid token: ' + err });
+            },
+            function(user, callback) {
+                ClassroomModel
+                    .find({_id: { $in : user._classrooms }})
+                    .select('calendar')
+                    .exec(function (err, docs) {
+                        if (!err && docs) {
+                            user.calendar=[];
+                            var now = new Date();
+                            docs.forEach(function(c){
+                                if(c.calendar.length>0){
+                                    c.calendar.forEach(function(e){
+                                        if (e.startTime >= now||e.endTime >= now) {
+                                            user.calendar.push(e)
+                                        }
+                                    })
+                                }
+                            })
+                            callback(null, user);
+                        }
+                    });
+            }
+        ], function (err, result) {
+            if(err){
+                res.status(result).json({"message":err});
+            } else {
+                res.status(200).json(result);
+            }
         });
+
     },
     update: function(req, res) {
         var decoded = auth.decodeToken(req,function(decoded){
@@ -196,7 +232,9 @@ module.exports = {
         auth.decodeToken(req,function(decoded){
             async.parallel({
                     updateClassroom: function(callback){
-                        ClassroomModel.update(req.params.classroomId, { $pull: { "_members": decoded.id}}, function(err, numAffected){
+                        console.log('decoded.id='+decoded.id)
+                        console.log('req.params.classroomId='+req.params.classroomId)
+                        ClassroomModel.update({_id:req.params.classroomId}, { $pull: { "_members": decoded.id}}, function(err, numAffected){
                             if (err) {
                                 callback(new Error('Failed to remove user from classroom'));
                             } else {
@@ -229,8 +267,8 @@ module.exports = {
         auth.decodeToken(req,function(decoded){
             var data = req.body.data.replace(/^\w+:\w+\/\w+;\w+,/, '')
             var buf = new Buffer(data, 'base64');
-            var emailRegex = /\w+:(\w+\/\w+);base64/;
-            var matches = emailRegex.exec(req.body.data);
+            var regex = /\w+:(\w+\/\w+);base64/;
+            var matches = regex.exec(req.body.data);
             var contentType;
             if(matches!=null&&matches.length>0){
                 contentType = matches[1];

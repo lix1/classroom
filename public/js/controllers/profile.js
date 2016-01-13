@@ -21,6 +21,15 @@ app.controller('ProfileCtrl', ['$state','$stateParams', '$scope', '$http','$uibM
     }
     init();
 
+    $scope.getParentFromSlug = function(slug) {
+        var regex = /(^\w+-[0-9]+-\w+)/;
+        var matches = regex.exec(slug);
+        if(matches!=null&&matches.length>0){
+            return matches[1];
+        }
+        return slug;
+    }
+
     $scope.addClass = function() {
         var modalInstance = $uibModal.open({
             animation: true,
@@ -104,6 +113,16 @@ app.controller('ProfileCtrl', ['$state','$stateParams', '$scope', '$http','$uibM
             $scope.profile.schedule = data.schedule;
 
         });
+    }
+
+    $scope.leave = function(id){
+        $http.delete('/api/profile/join/'+id)
+            .success(function(data, status, headers, config) {
+                notify(data.message);
+            })
+            .error(function(data, status, headers, config) {
+                notify(data.message);
+            });
     }
 
     $scope.getDayStr = function(dayArr) {

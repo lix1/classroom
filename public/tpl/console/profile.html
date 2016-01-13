@@ -105,46 +105,11 @@
                         <span class="text-sm text-muted">Todos</span>
                     </uib-tab-heading>
                     <div class="wrapper-md">
-                        <div class="m-b-sm text-md">This week</div>
-                        <div class="streamline b-l m-b">
-                            <div class="sl-item b-info b-l">
-                                <div class="m-l">
-                                    <div class="text-muted">Wed, 25 Mar</div>
-                                    <p>
-                                        <span><i class="fa fa-edit"></i><a href="" class="text-info">edit</a></span>
-                                        <span><i class="fa fa-check-square-o m-l-sm"></i><a href="" class="text-info">complete</a></span>
-                                    </p>
-                                    <p>Finished task <a href="" class="text-info">Testing</a>.</p>
-                                </div>
-                            </div>
-                            <div class="sl-item b-info b-l">
-                                <div class="m-l">
-                                    <div class="text-muted">Thu, 10 Mar</div>
-                                    <p>Trip to the moon</p>
-                                </div>
-                            </div>
-                            <div class="sl-item b-info b-l">
-                                <div class="m-l">
-                                    <div class="text-muted">Sat, 5 Mar</div>
-                                    <p>Prepare for presentation</p>
-                                </div>
-                            </div>
-                            <div class="sl-item b-info b-l">
-                                <div class="m-l">
-                                    <div class="text-muted">Sun, 11 Feb</div>
-                                    <p><a href="" class="text-info">Jessi</a> assign you a task <a href="" class="text-info">Mockup Design</a>.</p>
-                                </div>
-                            </div>
-                            <div class="sl-item b-info b-l">
-                                <div class="m-l">
-                                    <div class="text-muted">Thu, 17 Jan</div>
-                                    <p>Follow up to close deal</p>
-                                </div>
-                            </div>
+                        <div class="bg-white-only r r-2x m-b-xs wrapper-sm b-l b-info cr-group-box" ng-repeat="g in profile._classrooms | filter:{_parent:'!!'}">
+                            <div class="text-info h4 group-text m-b-xs"><a ui-sref="app.classroom({slug: g.slug })">{{g.name}}</a></div>
+                            <a class="pull-right text-xs text-muted" ng-click="leave(g.id)"><i class="fa fa-trash-o"></i></a>
+                            <div class="text-xs text-muted ng-binding">{{getParentFromSlug(g.slug)}}</div>
                         </div>
-                    </div>
-                    <div class="text-right">
-                        <a href="" class="btn btn-sm btn-primary padder-md m-b">More Todos</a>
                     </div>
                 </uib-tab>
                 <uib-tab>
@@ -153,39 +118,14 @@
                         <span class="text-sm text-muted">Schedule</span>
                     </uib-tab-heading>
                     <div class="wrapper-md">
-                        <div class="m-b-sm text-md">This week</div>
-                        <div class="streamline b-l m-b">
-                            <div class="sl-item b-info b-l">
-                                <div class="m-l">
-                                    <div class="text-muted">Wed, 25 Mar</div>
-                                    <p>Finished task <a href="" class="text-info">Testing</a>.</p>
-                                </div>
-                            </div>
-                            <div class="sl-item b-info b-l">
-                                <div class="m-l">
-                                    <div class="text-muted">Thu, 10 Mar</div>
-                                    <p>Trip to the moon</p>
-                                </div>
-                            </div>
-                            <div class="sl-item b-info b-l">
-                                <div class="m-l">
-                                    <div class="text-muted">Sat, 5 Mar</div>
-                                    <p>Prepare for presentation</p>
-                                </div>
-                            </div>
-                            <div class="sl-item b-info b-l">
-                                <div class="m-l">
-                                    <div class="text-muted">Sun, 11 Feb</div>
-                                    <p><a href="" class="text-info">Jessi</a> assign you a task <a href="" class="text-info">Mockup Design</a>.</p>
-                                </div>
-                            </div>
-                            <div class="sl-item b-info b-l">
-                                <div class="m-l">
-                                    <div class="text-muted">Thu, 17 Jan</div>
-                                    <p>Follow up to close deal</p>
-                                </div>
+                        <div class="sl-item b-info b-l" ng-repeat="event in profile.calendar">
+                            <div class="m-l">
+                                <div class="text-muted"><span class="text-info">starts</span> {{event.startTime}}</div>
+                                <div class="text-muted"><span class="text-info">ends</span> {{event.endTime}}</div>
+                                <p>{{event.title}}</p>
                             </div>
                         </div>
+
                     </div>
 
                 </uib-tab>

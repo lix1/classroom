@@ -14,7 +14,8 @@
 
 <ul class="breadcrumb bg-light lter b-b wrapper-md m-n">
     <li><a ui-sref="app.home"><i class="fa fa-home"></i> Home </a>
-    <li class="active"><i class="fa fa-users"></i> {{classroom.courseId}}</li>
+    <li ng-if="classroom._parent"><a ui-sref="app.classroom({slug: classroom._parent.slug })"><i class="fa fa-users"></i> {{classroom._parent.name}} </a>
+    <li class="active"><i class="fa fa-users"></i> {{classroom.name}}</li>
 </ul>
 
 
@@ -27,8 +28,8 @@
         <div class="bg-light lter b-b wrapper-md">
             <div class="row">
                 <div class="col-sm-6 col-xs-12">
-                    <h1 class="m-n font-thin h3 text-black">{{classroom.courseId}}</h1>
-                    <small class="text-muted">{{classroom.name}}</small>
+                    <h1 class="m-n font-thin h3 text-black">{{classroom.name}}</h1>
+                    <small class="text-muted">{{classroom.description}}</small>
                 </div>
                 <div class="col-sm-6 text-right hidden-xs">
                     <div class="inline m-r text-left">
@@ -118,7 +119,7 @@
     <div class="col w-xl bg-white-only b-l bg-auto no-border-xs">
         <div class="cr-r-tab">
             <uib-tabset justified="true" class="tab-content">
-                <uib-tab>
+                <uib-tab ng-if="!classroom._parent">
                     <uib-tab-heading>
                         <i class="fa fa-users text-md text-muted wrapper-sm"></i>
                         <span class="text-sm text-muted">Groups</span>
